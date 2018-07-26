@@ -81,8 +81,28 @@ public class IntList {
      */
 
     public static IntList dcatenate(IntList A, IntList B) {
-        //TODO:  fill in method
-        return null;
+        IntList c;
+        c = A;
+        while (c.rest != null) {
+            c = c.rest;
+        }
+        c.rest = B;
+        return A;
+    }
+
+    /**
+     * 复制一个每个值完全相同的链表
+     * @param src 源链表
+     * @return 复制后的链表
+     */
+    public static IntList copy(IntList src) {
+        if (src == null) {
+            return null;
+        }
+        if (src.rest == null) {
+            return new IntList(src.first, null);
+        }
+        return new IntList(src.first, IntList.copy(src.rest));
     }
 
     /**
@@ -90,8 +110,8 @@ public class IntList {
      * * elements of B.  May NOT modify items of A.  Use 'new'.
      */
     public static IntList catenate(IntList A, IntList B) {
-        //TODO:  fill in method
-        return null;
+        IntList cloneA = IntList.copy(A);
+        return IntList.dcatenate(cloneA, B);
     }
 
 
