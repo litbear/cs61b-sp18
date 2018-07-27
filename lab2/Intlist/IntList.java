@@ -115,18 +115,73 @@ public class IntList {
     }
 
 
+    /**
+     * 返回链表的指定元素
+     * @param index 索引
+     * @return 指定元素
+     */
+    public int get(int index) {
+        if (index == 0) {
+            return first;
+        }
+        return this.rest.get(index - 1);
+    }
 
 
+    /**
+     * 获取当前链表长度 递归形式
+     * @return 链表长度
+     */
+    public int size() {
+        if (rest == null) {
+            return 1;
+        }
+        return 1 + rest.size();
+    }
 
 
+    /**
+     * 获取当前链表长度 迭代形式
+     * @return 链表长度
+     */
+    public int iterativeSize() {
+        IntList c = this;
+        int size = 1;
+        while (c.rest != null) {
+            size += 1;
+            c = c.rest;
+        }
+        return size;
+    }
 
 
+    /**
+     * 新建链表，其每个元素比原链表增加 x
+     * @param L 原链表
+     * @param x 增加值
+     * @return 结果链表
+     */
+    public static IntList incrList(IntList L, int x) {
+        if (L.rest == null) {
+            return new IntList(L.first + x, null);
+        }
+        return new IntList(L.first + x, IntList.incrList(L.rest, x));
+    }
 
 
-
-
-
-
+    /**
+     * 操作链表，使其每个元素都减少 x
+     * @param L 待操作链表
+     * @param x 减少值
+     * @return 操作结果
+     */
+    public static IntList dincrList(IntList L, int x) {
+        L.first -= x;
+        if (L.rest == null) {
+            return L;
+        }
+        return IntList.dincrList(L.rest, x);
+    }
 
 
     /**

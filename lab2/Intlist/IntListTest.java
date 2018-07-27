@@ -66,4 +66,30 @@ public class IntListTest {
         assertEquals(IntList.of(1, 2, 3), A);
     }
 
+    @Test
+    public void testGet() {
+        IntList A = IntList.of(1, 2, 3, 4, 5);
+        assertEquals(A.get(0), 1);
+        assertEquals(A.get(1), 2);
+        assertEquals(A.get(2), 3);
+        assertEquals(A.get(3), 4);
+        assertEquals(A.get(4), 5);
+    }
+
+    @Test
+    public void testIncrList() {
+        IntList A = IntList.of(1, 2, 3, 4, 5);
+        int x = 3;
+        IntList result = IntList.incrList(A, x);
+        assertEquals(result, IntList.of(4, 5, 6, 7, 8));
+    }
+
+    @Test
+    public void testDincrList() {
+        IntList A = IntList.of(4, 5, 6, 7, 8);
+        int x = 3;
+        IntList.dincrList(A, x);
+        assertEquals(A, IntList.of(1, 2, 3, 4, 5));
+    }
+
 }
