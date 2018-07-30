@@ -1,6 +1,6 @@
 import java.util.Arrays;
 
-class NBody{
+class NBody {
 
     private static final String PLANET_FILE = "./data/planets.txt";
     private static final String BACKGROUND_IMAGE = "./images/starfield.jpg";
@@ -50,11 +50,13 @@ class NBody{
             StdDraw.enableDoubleBuffering();
 
             double time = 0.0;
-            while (time <= T){
+            while (time <= T) {
                 // Create an xForces array and yForces array.
                 // double[] xForces, yForces;
-                // Calculate the net x and y forces for each planet, storing these in the xForces and yForces arrays respectively.
-                // Call update on each of the planets. This will update each planet’s position, velocity, and acceleration.
+                // Calculate the net x and y forces for each planet,
+                // storing these in the xForces and yForces arrays respectively.
+                // Call update on each of the planets.
+                // This will update each planet’s position, velocity, and acceleration.
                 Arrays
                     .stream(plantArray)
                     .forEach(e -> 
@@ -71,7 +73,9 @@ class NBody{
                     .forEach(e -> e.draw());
                 // Show the offscreen buffer (see the show method of StdDraw).
                 StdDraw.show();
-                // Pause the animation for 10 milliseconds (see the pause method of StdDraw). You may need to tweak this on your computer.
+                // Pause the animation for 10 milliseconds
+                // (see the pause method of StdDraw).
+                // You may need to tweak this on your computer.
                 StdDraw.pause(10);
                 // Increase your time variable by dt.
                 time += dt;
@@ -86,7 +90,7 @@ class NBody{
                         e.xxPos, e.yyPos, e.xxVel,
                         e.yyVel, e.mass, e.imgFileName));
 
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             StdOut.println("Oops... Something wrong!");
         }
     }

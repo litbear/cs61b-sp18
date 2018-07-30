@@ -13,7 +13,11 @@ public class Planet {
 
     public static final double G = 6.67e-11; 
 
-    public Planet(double xxPos, double yyPos, double xxVel, double yyVel, double mass, String imgFileName) {
+    public Planet(double xxPos,
+                  double yyPos,
+                  double xxVel,
+                  double yyVel,
+                  double mass, String imgFileName) {
         this.xxPos = xxPos;
         this.yyPos = yyPos;
         this.xxVel = xxVel;
@@ -55,8 +59,8 @@ public class Planet {
     public double calcNetForceExertedByX(Planet [] pList) {
         return Arrays
             .stream(pList)
-            .filter(e -> this.equals(e) == false)
-            .map(e -> this.calcForceExertedByX(e))
+            .filter(e -> !this.equals(e))
+            .map(this::calcForceExertedByX)
             .mapToDouble(Double::doubleValue)
             .sum();
     }
@@ -64,8 +68,8 @@ public class Planet {
     public double calcNetForceExertedByY(Planet [] pList) {
         return Arrays
             .stream(pList)
-            .filter(e -> this.equals(e) == false)
-            .map(e -> this.calcForceExertedByY(e))
+            .filter(e -> !this.equals(e))
+            .map(this::calcForceExertedByY)
             .mapToDouble(Double::doubleValue)
             .sum();
     }
