@@ -64,23 +64,20 @@ public class SLList {
         if (first == null) {
             return;
         }
-        // 新的链表尾
-        IntNode end = null;
-        // 指针
-        IntNode p = first;
-        // 至少执行一次
-        while (p != null) {
-            // 保存 原链表 指针后的元素
-            IntNode rest = p.next;
-            // 当前元素指向新链表尾
-            p.next = end;
-            // 移动新链表尾
-            end = p;
-            // 移动指针
-            p = rest;
+        IntNode newList = null;
+        IntNode pointer = first;
+        while (pointer != null) {
+            // 保留剩余链表 游离出指针
+            IntNode rest = pointer.next;
+            // 将指针指向新链表
+            pointer.next = newList;
+            // 更新新数组
+            newList = pointer;
+            // 更新指针
+            pointer = rest;
         }
-        // 裸链表赋值
-        first = end;
+        // 更新裸链表
+        first = newList;
     }
 
 
