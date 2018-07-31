@@ -46,6 +46,10 @@ public class SLList {
             return;
         }
         IntNode p = first;
+        /*
+         * 如果插入位置是n 则应循环 n-1 次
+         * 链表尽头也停止
+         */
         while (p.next != null && position > 1) {
             p = p.next;
             position -= 1;
@@ -83,14 +87,19 @@ public class SLList {
 
     public void reverse() {
         if (first == null) {
-            return;
+            return ;
         }
-        IntNode end = null;
-        IntNode p = first;
-        if (p.next == null) {
-            return;
-        }
+        first = reverseHelper(first);
+    }
 
+    private IntNode reverseHelper(IntNode oldList) {
+        if (oldList == null || oldList.next == null) {
+            return oldList;
+        }
+        IntNode newList = reverseHelper(oldList.next);
+        oldList.next.next = oldList;
+        oldList.next = null;
+        return newList;
     }
 
     @Override

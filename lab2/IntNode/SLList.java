@@ -1,6 +1,8 @@
 /**
  * Singly linked list
  * 单向链表 封装递归细节
+ *
+ * 会随着课程不断打磨
  */
 public class SLList {
 
