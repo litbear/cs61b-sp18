@@ -92,15 +92,40 @@ public class SLList {
         first = reverseHelper(first);
     }
 
+    /**
+     * 递归翻转 nude linked list 的帮助函数
+     * @param oldList 待操作的 nude linked list
+     * @return 被翻转后的 nude linked list
+     */
     private IntNode reverseHelper(IntNode oldList) {
         if (oldList == null || oldList.next == null) {
             return oldList;
         }
+        // 旧链表尾部
         IntNode newList = reverseHelper(oldList.next);
+        // 翻转前两个元素
         oldList.next.next = oldList;
+        // 原链表头变为新链表尾部
         oldList.next = null;
+        // 返回值不断后移，直到旧链表尾部
         return newList;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     @Override
     public int hashCode() {
