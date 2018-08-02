@@ -1,3 +1,8 @@
+import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import java.util.LinkedList;
+
 /** Performs some basic linked list tests. */
 public class LinkedListDequeTest {
 	
@@ -10,6 +15,64 @@ public class LinkedListDequeTest {
 		return true;
 	}
 
+	@Test
+	public void testIsEmpty() {
+		LinkedListDeque<Integer> listDeque = new LinkedListDeque<>();
+		assertEquals(true, listDeque.isEmpty());
+		listDeque.addFirst(1);
+		assertEquals(false, listDeque.isEmpty());
+		listDeque.removeFirst();
+		assertEquals(true, listDeque.isEmpty());
+	}
+
+	@Test(expected = IndexOutOfBoundsException.class)
+	public void testGetExpectedFail() {
+		LinkedListDeque<Integer> listDeque = new LinkedListDeque<>();
+		listDeque.addLast(0);
+		listDeque.addLast(1);
+		listDeque.addLast(2);
+		listDeque.addLast(3);
+		listDeque.get(200);
+	}
+
+	@Test
+	public void testGet() {
+		LinkedListDeque<Integer> listDeque = new LinkedListDeque<>();
+		listDeque.addLast(0);
+		listDeque.addLast(1);
+		listDeque.addLast(2);
+		listDeque.addLast(3);
+		listDeque.addLast(4);
+		listDeque.addLast(5);
+		assertEquals(0, listDeque.get(0).intValue());
+		assertEquals(2, listDeque.get(2).intValue());
+		assertEquals(5, listDeque.get(5).intValue());
+	}
+
+
+	@Test(expected = IndexOutOfBoundsException.class)
+	public void testGetRecursiveExpectedFail() {
+		LinkedListDeque<Integer> listDeque = new LinkedListDeque<>();
+		listDeque.addLast(0);
+		listDeque.addLast(1);
+		listDeque.addLast(2);
+		listDeque.addLast(3);
+		listDeque.getRecursive(200);
+	}
+
+	@Test
+	public void testGetRecursive() {
+		LinkedListDeque<Integer> listDeque = new LinkedListDeque<>();
+		listDeque.addLast(0);
+		listDeque.addLast(1);
+		listDeque.addLast(2);
+		listDeque.addLast(3);
+		listDeque.addLast(4);
+		listDeque.addLast(5);
+		assertEquals(0, listDeque.getRecursive(0).intValue());
+		assertEquals(2, listDeque.getRecursive(2).intValue());
+		assertEquals(5, listDeque.getRecursive(5).intValue());
+	}
 	/* Utility method for printing out empty checks. */
 	public static boolean checkSize(int expected, int actual) {
 		if (expected != actual) {
@@ -85,8 +148,30 @@ public class LinkedListDequeTest {
 	}
 
 	public static void main(String[] args) {
-		System.out.println("Running tests.\n");
-		addIsEmptySizeTest();
-		addRemoveTest();
+//		System.out.println("Running tests.\n");
+//		addIsEmptySizeTest();
+//		addRemoveTest();
+
+		LinkedListDeque<Integer> listDeque = new LinkedListDeque<>();
+		listDeque.addFirst(4);
+        listDeque.addFirst(3);
+        listDeque.addFirst(2);
+        listDeque.addFirst(1);
+
+//        listDeque.removeFirst();
+        listDeque.removeLast();
+		listDeque.removeLast();
+		listDeque.removeLast();
+		listDeque.removeLast();
+		listDeque.removeLast();
+		listDeque.removeLast();
+
+//        listDeque.addLast(1);
+//        listDeque.addLast(2);
+//        listDeque.addLast(3);
+//        listDeque.addLast(4);
+//        listDeque.printDeque();
+		System.out.println(listDeque);
+
 	}
 } 
