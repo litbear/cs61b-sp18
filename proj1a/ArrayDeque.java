@@ -6,20 +6,29 @@ public class ArrayDeque<T> {
     public static final int DEFAULT_ARRAY_SIZE = 8;
 
     private T[] items;
-    private int size;
-    private int pointer = 0;
+
+    /**
+     * the index of element remove() or pop() will operate,
+     * HOWEVER addFirst() will add element BEFORE it;
+     * there IS an element in this index.
+     */
+    private int head;
+
+    /**
+     * the index of element addLast(E), add(E), or push(E) will operate,
+     * there IS NOT element in this index.
+     */
+    private int tail;
 
     public ArrayDeque(int initSize) {
         items = (T[]) new Object[initSize];
-        size = 0;
     }
 
     public ArrayDeque() {
         items = (T[]) new Object[DEFAULT_ARRAY_SIZE];
-        size = 0;
     }
 
-    private boolean isAlmostFull(){
+    private boolean isAlmostFull() {
         return true;
     }
 
@@ -27,7 +36,7 @@ public class ArrayDeque<T> {
         return true;
     }
 
-    private void resize() {
+    private void grow() {
 
     }
 
@@ -51,11 +60,31 @@ public class ArrayDeque<T> {
         return true;
     }
 
-    public int size() {
-        return 0;
+    private static int inc(int index, int length) {
+        index += 1;
+        if (index >= length) {
+            index = 0;
+        }
+        return index;
     }
 
-    // @Todo
+    private static int dec(int index, int length) {
+        index -= 1;
+        if (index < 0) {
+            index += length;
+        }
+        return index;
+    }
+
+    private static int sub(int tail, int head, int length) {
+        int size = tail - head;
+        return size < 0 ? (size + length) : size;
+    }
+
+    public int size() {
+        return sub(tail, head, items.length);
+    }
+
     public T getFirst() {
         return null;
     }
