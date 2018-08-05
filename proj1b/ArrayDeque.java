@@ -1,8 +1,10 @@
+import org.junit.Test;
+
 import java.util.Arrays;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class ArrayDeque<T> {
+public class ArrayDeque<T> implements Deque<T> {
 
     public static final int DEFAULT_ARRAY_SIZE = 8;
 
@@ -91,6 +93,7 @@ public class ArrayDeque<T> {
         tail = length;
     }
 
+    @Override
     public void addFirst(T item) {
         if (item == null) {
             throw new NullPointerException();
@@ -106,6 +109,7 @@ public class ArrayDeque<T> {
         return items[head];
     }
 
+    @Override
     public T removeFirst() {
         T item = getFirst();
         // if 条件很重要！ 如果不判断，则会造成first一直前移
@@ -120,6 +124,7 @@ public class ArrayDeque<T> {
         return item;
     }
 
+    @Override
     public void addLast(T item) {
         if (item == null) {
             throw new NullPointerException();
@@ -139,6 +144,7 @@ public class ArrayDeque<T> {
         return items[index];
     }
 
+    @Override
     public T removeLast() {
         T item = getLast();
         // if 条件很重要！ 如果不判断会造成 tail 一直后移
@@ -154,18 +160,22 @@ public class ArrayDeque<T> {
 
     }
 
+    @Override
     public boolean isEmpty() {
         return head == tail;
     }
 
+    @Override
     public int size() {
         return sub(tail, head, items.length);
     }
 
+    @Override
     public void printDeque() {
         System.out.println(this);
     }
-    
+
+    @Override
     public T get(int index) {
         if (index < 0 || index > size() - 1) {
             return null;
