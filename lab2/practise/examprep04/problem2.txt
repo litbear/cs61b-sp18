@@ -1,0 +1,11 @@
+public static void main(String[] args) {
+    Cat c = new Animal(); // Compile-Error
+    Animal a = new Cat(); // OK
+    Dog d = new Cat(); // Compile-Error
+    Tree t = new Animal(); // Compile-Error
+    Animal a = (Cat) new Cat(); // OK
+    Animal a = (Animal) new Cat(); // OK
+    Dog d = (Dog) new Animal(); // Runtime-Error
+    Cat c = (Cat) new Dog(); // Compile-Error
+    Animal a = (Animal) new Tree(); // Compile-Error
+}
