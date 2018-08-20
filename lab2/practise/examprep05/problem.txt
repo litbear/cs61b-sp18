@@ -1,0 +1,21 @@
+2. 
+
+a) 
+
+我的答案是用stack 很二的方法
+
+给出的答案是用Map，遍历数组，寻找Map中有没有(k - i)，如果没有则将i放入Map，直到遍历完成
+
+b) 
+
+先用Map，再用PriorityQueue
+
+3.
+
+a)
+
+和disc5重复了
+
+b) 
+标准答案用两个stack 
+但明显用带 Comparator 的 PriorityQueue更方便吧
