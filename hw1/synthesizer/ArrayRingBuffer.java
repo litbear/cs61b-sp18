@@ -2,6 +2,8 @@ package synthesizer;
 import synthesizer.AbstractBoundedQueue;
 
 import java.util.Iterator;
+import java.util.Spliterator;
+import java.util.function.Consumer;
 
 public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T> {
     /* Index for the next dequeue or peek. */
@@ -33,6 +35,11 @@ public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T> {
             return 0;
         }
         return index;
+    }
+
+    private static int sub(int tail, int head, int length) {
+        int size = tail - head;
+        return size < 0 ? (size + length) : size;
     }
 
     /**
@@ -73,10 +80,57 @@ public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T> {
     public T peek() {
         // Return the first item. None of your instance variables should change.
         if (isEmpty()) {
-            throw new RuntimeException("Ring buffer empty");
+            throw new RuntimeException("Ring buffer Underflow");
         }
         return rb[first];
     }
 
-    // TODO: When you get to part 5, implement the needed code to support iteration.
+    private class ArrayRingBufferIterator implements Iterator<T> {
+
+        private int point = first;
+        private int count = 0;
+
+        @Override
+        public boolean hasNext() {
+            return count != fillCount();
+        }
+
+        @Override
+        public T next() {
+            T result = rb[point];
+            point = inc(point, capacity());
+            count += 1;
+            return result;
+        }
+    }
+
+    private class ArrayRingBufferMutableIterator implements Iterator<T> {
+
+
+        @Override
+        public boolean hasNext() {
+            return !isEmpty();
+        }
+
+        @Override
+        public T next() {
+            return dequeue();
+        }
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return new ArrayRingBufferMutableIterator();
+    }
+
+    @Override
+    public void forEach(Consumer<? super T> action) {
+
+    }
+
+    @Override
+    public Spliterator<T> spliterator() {
+        return null;
+    }
+
 }

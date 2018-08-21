@@ -34,6 +34,19 @@ public class TestArrayRingBuffer {
         arb.peek();
     }
 
+    @Test
+    public void testForEach() {
+        ArrayRingBuffer<Double> arb = new ArrayRingBuffer<>(4);
+        arb.enqueue(9.3); // 9.3
+        arb.enqueue(15.1);   // 9.3  15.1
+        arb.enqueue(31.2);   // 9.3  15.1  31.2
+        arb.enqueue(-3.1);   // 9.3  15.1  31.2  -3.1
+        for (double i: arb) {
+            System.out.println(i);
+        }
+        assertTrue(arb.isEmpty());
+    }
+
     /** Calls tests for ArrayRingBuffer. */
     public static void main(String[] args) {
         jh61b.junit.textui.runClasses(TestArrayRingBuffer.class);

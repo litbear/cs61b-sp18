@@ -10,6 +10,8 @@ public class GuitarString {
     private static final int SR = 44100;      // Sampling Rate
     private static final double DECAY = .996; // energy decay factor
 
+    private double frequency;
+
     /* Buffer for storing sound data. */
     private BoundedQueue<Double> buffer;
 
@@ -19,6 +21,7 @@ public class GuitarString {
         //       cast the result of this divsion operation into an int. For better
         //       accuracy, use the Math.round() function before casting.
         //       Your buffer should be initially filled with zeros.
+        this.frequency = frequency;
         int capacity = (int) Math.round(SR / frequency);
         buffer = new ArrayRingBuffer<>(capacity);
         while (!buffer.isFull()) {
@@ -59,5 +62,10 @@ public class GuitarString {
     public double sample() {
         // Return the correct thing.
         return buffer.peek();
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getName() + "<" + String.valueOf(frequency) + ">";
     }
 }
