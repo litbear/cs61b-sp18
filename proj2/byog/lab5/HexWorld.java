@@ -14,9 +14,13 @@ import java.util.stream.Stream;
 
 /**
  * Draws a world consisting of hexagonal regions.
+ *
+ * @Todo  Stream zip/combination
+ * https://www.baeldung.com/java-collections-zip
+ *
  */
 public class HexWorld {
-    private static final long SEED = 2873123;
+    private static final long SEED = 147258;
     private static final Random RANDOM = new Random(SEED);
 
     /**
@@ -118,9 +122,6 @@ public class HexWorld {
         return i < side? i: (2 * side - 1 - i);
     }
 
-    //----------------------------------------------------
-
-
     /**
      * 根据偏移量产生新Position
      *
@@ -133,6 +134,9 @@ public class HexWorld {
         return new Position(p.getxIndex() - xOffset, p.getyIndex() + yOffset);
     }
 
+    //----------------------------------------------------
+
+
     /**
      * 根据六边形左下顶点坐标及边长计算其右上方相邻及延长线上的六边形坐标
      *
@@ -142,7 +146,7 @@ public class HexWorld {
      * @return 右上方相邻六边形左下顶点坐标
      */
     private static Position topRightNeighbor(Position p, int side, int n) {
-        return new Position(p.getxIndex() + 2 * n * side, p.getyIndex() + n * side);
+        return new Position(p.getxIndex() + (2 * side - 1) * n, p.getyIndex() + n * side);
     }
 
     /**
@@ -154,7 +158,7 @@ public class HexWorld {
      * @return 左上方相邻六边形左下顶点坐标
      */
     private static Position topLeftNeighbor(Position p, int side, int n) {
-        return new Position(p.getxIndex() - 2 * n * side, p.getyIndex() + n * side);
+        return new Position(p.getxIndex() - (2 * side - 1) * n, p.getyIndex() + n * side);
     }
 
 
