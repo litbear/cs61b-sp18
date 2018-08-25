@@ -10,11 +10,15 @@ import java.util.Arrays;
 import java.util.Random;
 import java.util.function.Function;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 /**
  * Draws a world consisting of hexagonal regions.
  */
 public class HexWorld {
+    private static final long SEED = 2873123;
+    private static final Random RANDOM = new Random(SEED);
+
     /**
      * 在坐标系上的指定位置绘制指定边长的六边形并填充
      *
@@ -114,6 +118,9 @@ public class HexWorld {
         return i < side? i: (2 * side - 1 - i);
     }
 
+    //----------------------------------------------------
+
+
     /**
      * 根据偏移量产生新Position
      *
@@ -127,36 +134,99 @@ public class HexWorld {
     }
 
     /**
-     * 根据六边形左下顶点坐标及边长计算其右上方相邻六边形坐标
+     * 根据六边形左下顶点坐标及边长计算其右上方相邻及延长线上的六边形坐标
      *
      * @param p 给定左下顶点
      * @param side 边长
+     * @param n    移动的次数
      * @return 右上方相邻六边形左下顶点坐标
      */
-    public static Position topRightNeighbor(Position p, int side) {
-        return new Position(p.getxIndex() + 2 * side, p.getyIndex() + side);
+    private static Position topRightNeighbor(Position p, int side, int n) {
+        return new Position(p.getxIndex() + 2 * n * side, p.getyIndex() + n * side);
     }
 
     /**
-     * 根据六边形左下顶点坐标及边长计算其左上方相邻六边形坐标
+     * 根据六边形左下顶点坐标及边长计算其左上方相邻及延长线上的六边形坐标
      *
      * @param p 给定左下顶点
      * @param side 边长
+     * @param n    移动的次数
      * @return 左上方相邻六边形左下顶点坐标
      */
-    public static Position topLeftNeighbor(Position p, int side) {
-        return new Position(p.getxIndex() - 2 * side, p.getyIndex() + side);
+    private static Position topLeftNeighbor(Position p, int side, int n) {
+        return new Position(p.getxIndex() - 2 * n * side, p.getyIndex() + n * side);
     }
 
 
     /**
-     * 根据六边形左下顶点坐标及边长计算其上方相邻六边形坐标
+     * 根据六边形左下顶点坐标及边长计算其上方相邻及延长线上的六边形坐标
      *
      * @param p 给定左下顶点
      * @param side 边长
+     * @param n    移动的次数
      * @return 上方相邻六边形左下顶点坐标
      */
-    public static Position topNeighbor(Position p, int side) {
-        return new Position(p.getxIndex(), p.getyIndex() + 2 * side);
+    private static Position topNeighbor(Position p, int side, int n) {
+        return new Position(p.getxIndex(), p.getyIndex() + 2 * n * side);
+    }
+
+    /**
+     * 生成密铺六边形的左下角顶点数组
+     *
+     * @param root 密铺起点
+     * @param side 小六边形边长
+     * @param n 大六边形边长
+     */
+    public static void addTesselationPisitions(TETile[][] world, Position root, int side, int n) {
+        if (side < 2) {
+            throw new IllegalArgumentException("the side length must be larger than 1");
+        }
+        if (n < 2) {
+            throw new IllegalArgumentException("hexagon must repeat more than once!");
+        }
+        // 3 4 5 4 3
+        int[] columnLengths = IntStream
+                .range(1 - n, n)
+                .map(e -> (e < 0) ? (((2 * n) - 1) + e) : ((2 * n) - 1 - e))
+                .toArray();
+
+        Position[] positions = IntStream
+                .range(1 - n, n)
+                .mapToObj(e -> e < 0 ? topLeftNeighbor(root, side, -e) : topRightNeighbor(root, side, e))
+                .toArray(Position[]::new);
+
+        IntStream
+                .range(0, positions.length)
+                .mapToObj(e -> getPositionsToTop(positions[e], columnLengths[e], side))
+                .forEach(e -> e.forEach(p -> addHexagon(world, p, side, randomTile())));
+    }
+
+    /**
+     * 获取随机方块
+     *
+     * @return
+     */
+    private static TETile randomTile() {
+        int tileNum = RANDOM.nextInt(3);
+        switch (tileNum) {
+            case 0: return Tileset.WALL;
+            case 1: return Tileset.FLOWER;
+            case 2: return Tileset.GRASS;
+            default: return Tileset.GRASS;
+        }
+    }
+
+    /**
+     * 根据给定的起点坐标和列的长度列出该列所有六边形的左下顶点
+     *
+     * @param bottom 起点坐标
+     * @param columnLength 列的长度
+     * @param side  小六边形边长
+     * @return 该列所有六边形的左下顶点
+     */
+    private static Stream<Position> getPositionsToTop(Position bottom, int columnLength, int side) {
+        return IntStream
+                .range(0, columnLength)
+                .mapToObj(e -> topNeighbor(bottom, side, e));
     }
 }

@@ -25,20 +25,7 @@ public class TesselationDemo {
         }
 
         Position root = new Position(23, 0);
-        int length = 3;
-//        HexWorld.addHexagon(world, root, length, Tileset.SAND);
-
-        // 3 4 5 4 3
-        IntStream
-                .range(0, 5)
-                .map(e -> e < 2? e + 3: 4 - e + 3)
-                .forEach(System.out::println);
-
-        // -2 -1 0 1 2
-        IntStream
-                .range(0, 5)
-                .map(e -> e - 2)
-                .forEach(System.out::println);
+        HexWorld.addTesselationPisitions(world, root, 3, 3);
 
 
         ter.renderFrame(world);
