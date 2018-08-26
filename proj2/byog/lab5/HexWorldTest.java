@@ -10,18 +10,22 @@ import java.util.stream.IntStream;
 public class HexWorldTest {
 
     @Test
-    public void getStartPositionArrayTest() {
-        Position p = new Position(25, 25);
-        int side = 6;
-        Position[] startPositionArray = HexWorld.getStartPositionArray(p, side);
-        Arrays.stream(startPositionArray).forEach(System.out::println);
-    }
+    public void offsetTest() {
+        int side = 3;
+        // 0, -1, -2, -2, -1, 0
+        int[] xOffsets = IntStream
+                .range(0, side << 1)
+                .map(e -> e < side? e: (2 * side - 1 - e))
+                .map(e -> -e)
+                .toArray();
+        assertArrayEquals(new int[]{0, -1, -2, -2, -1, 0}, xOffsets);
+        int[] rowLengths = IntStream
+                .range(0, (side << 1))
+                .map(e -> side + 2 * (xOffsets[e] < 0? -xOffsets[e]: xOffsets[e]))
+                .toArray();
+        int[] exceptArray = new int[]{3, 5 ,7, 7, 5, 3};
+        assertArrayEquals(exceptArray, rowLengths);
 
-    @Test
-    public void testGetRowLengthArray() {
-        int[] rowLengthArray = HexWorld.getRowLengthArray(6);
-        int[] exceptArray = {6, 8, 10, 12, 14, 16, 16, 14, 12, 10, 8, 6};
-        Assert.assertArrayEquals(exceptArray, rowLengthArray);
     }
 
     @Test

@@ -8,7 +8,7 @@ import java.util.stream.IntStream;
 
 public class TesselationDemo {
     private static final int WIDTH = 50;
-    private static final int HEIGHT = 50;
+    private static final int HEIGHT = 40;
 
 
 

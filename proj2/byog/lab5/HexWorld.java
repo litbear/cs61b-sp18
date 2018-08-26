@@ -39,12 +39,37 @@ public class HexWorld {
             throw new IllegalArgumentException("you ruined the world!");
         }
 
-
-        Position[] startPositions = getStartPositionArray(p, side);
-        int[] rowLength = getRowLengthArray(side);
+        int[] xOffsets = IntStream
+                .range(0, side << 1)
+                .map(e -> e < side? e: (2 * side - 1 - e))
+                .map(e -> -e)
+                .toArray();
+        int[] yOffsets = IntStream
+                .range(0, side << 1)
+                .toArray();
+        int[] rowLengths = IntStream
+                .range(0, (side << 1))
+                .map(e -> side + 2 * (xOffsets[e] < 0? -xOffsets[e]: xOffsets[e]))
+                .toArray();
+        Position[] rowHeads = IntStream
+                .range(0, side << 1)
+                .mapToObj(e -> getNewPositionByOffset(p, xOffsets[e], yOffsets[e]))
+                .toArray(Position[]::new);
         IntStream
-                .range(0, startPositions.length)
-                .forEach(e -> drawRow(world, startPositions[e], rowLength[e], t));
+                .range(0, side << 1)
+                .forEach(e -> drawRow(world, rowHeads[e], rowLengths[e], t));
+    }
+
+    /**
+     * 根据给定的坐标和偏移量得出新的坐标
+     *
+     * @param p  基坐标
+     * @param xOffset x轴偏移量
+     * @param yOffset y轴偏移量
+     * @return 新的坐标点
+     */
+    private static Position getNewPositionByOffset(Position p, int xOffset, int yOffset){
+        return new Position(p.getxIndex() + xOffset, p.getyIndex() + yOffset);
     }
 
     /**
@@ -72,67 +97,6 @@ public class HexWorld {
                 && position.getyIndex() < height;
     }
 
-    /**
-     * 根据边长获取每一行的长度
-     *
-     * @param side 边长
-     * @return 每一行的长度组成的列表
-     */
-    static int[] getRowLengthArray(int side) {
-        return IntStream
-                .range(0, (side << 1))
-                .map(e -> getRowLength(e, side))
-                .toArray();
-    }
-
-    /**
-     * 根据行号与边长计算每一行的长度
-     *
-     * @param i 行号
-     * @param side 边长
-     * @return 该行的长度
-     */
-    private static int getRowLength(int i, int side) {
-        return getXOffset(i, side) * 2 + side;
-    }
-
-
-    /**
-     * 根据左下角坐标和边长生成起始点的坐标
-     *
-     * @param p 起始点坐标
-     * @param side 六边形边长
-     * @return  起始点坐标数组
-     */
-    static Position[] getStartPositionArray(Position p, int side) {
-        return IntStream
-                .range(0, side << 1)
-                .mapToObj(e -> getPositionByOffset(p, getXOffset(e, side), e))
-                .toArray(Position[]::new);
-    }
-
-    /**
-     * 根据六边形的行数计算相应行起始位置的坐标x轴偏移量
-     *
-     * @param i 行数
-     * @param side 边长
-     * @return x轴偏移量
-     */
-    private static int getXOffset(int i, int side){
-        return i < side? i: (2 * side - 1 - i);
-    }
-
-    /**
-     * 根据偏移量产生新Position
-     *
-     * @param p 原始坐标
-     * @param xOffset y轴偏移量
-     * @param yOffset x轴偏移量
-     * @return 偏移后的坐标
-     */
-    private static Position getPositionByOffset(Position p, int xOffset, int yOffset) {
-        return new Position(p.getxIndex() - xOffset, p.getyIndex() + yOffset);
-    }
 
     //----------------------------------------------------
 
