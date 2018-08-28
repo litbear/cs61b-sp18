@@ -1,14 +1,10 @@
 package byog.lab5;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import byog.Core.Position;
 
-import byog.TileEngine.TERenderer;
 import byog.TileEngine.TETile;
 import byog.TileEngine.Tileset;
 
-import java.util.Arrays;
 import java.util.Random;
-import java.util.function.Function;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -20,8 +16,6 @@ import java.util.stream.Stream;
  *
  */
 public class HexWorld {
-    private static final long SEED = 147258;
-    private static final Random RANDOM = new Random(SEED);
 
     /**
      * 在坐标系上的指定位置绘制指定边长的六边形并填充
@@ -145,7 +139,7 @@ public class HexWorld {
      * @param side 小六边形边长
      * @param n 大六边形边长
      */
-    public static void addTesselationPisitions(TETile[][] world, Position root, int side, int n) {
+    public static void addTesselationPisitions(TETile[][] world, Position root, int side, int n, Random random) {
         if (side < 2) {
             throw new IllegalArgumentException("the side length must be larger than 1");
         }
@@ -166,20 +160,27 @@ public class HexWorld {
         IntStream
                 .range(0, positions.length)
                 .mapToObj(e -> getPositionsToTop(positions[e], columnLengths[e], side))
-                .forEach(e -> e.forEach(p -> addHexagon(world, p, side, randomTile())));
+                .forEach(e -> e.forEach(p -> addHexagon(world, p, side, randomTile(random))));
     }
 
     /**
      * 获取随机方块
      *
-     * @return
+     * @param r 随机数对象
+     * @return 随机方块
      */
-    private static TETile randomTile() {
-        int tileNum = RANDOM.nextInt(3);
+    private static TETile randomTile(Random r) {
+        int tileNum = r.nextInt(10);
         switch (tileNum) {
             case 0: return Tileset.WALL;
             case 1: return Tileset.FLOWER;
             case 2: return Tileset.GRASS;
+            case 4: return Tileset.FLOOR;
+            case 5: return Tileset.WATER;
+            case 6: return Tileset.MOUNTAIN;
+            case 7: return Tileset.TREE;
+            case 8: return Tileset.PLAYER;
+            case 9: return Tileset.UNLOCKED_DOOR;
             default: return Tileset.GRASS;
         }
     }

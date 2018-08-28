@@ -1,5 +1,6 @@
 package byog.lab5;
 
+import byog.Core.Position;
 import org.junit.Assert;
 import org.junit.Test;
 import static org.junit.Assert.assertArrayEquals;
