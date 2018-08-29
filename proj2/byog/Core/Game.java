@@ -2,6 +2,12 @@ package byog.Core;
 
 import byog.TileEngine.TERenderer;
 import byog.TileEngine.TETile;
+import byog.TileEngine.Tileset;
+import byog.lab5.HexWorld;
+
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.stream.IntStream;
 
 public class Game {
     TERenderer ter = new TERenderer();
@@ -32,7 +38,29 @@ public class Game {
         // and return a 2D tile representation of the world that would have been
         // drawn if the same inputs had been given to playWithKeyboard().
 
-        TETile[][] finalWorldFrame = null;
+        TETile[][] finalWorldFrame = getTeTilesWithNothing();
+        int maxRooms = 25;
+        int maxRoomWidth = 6;
+        int maxRoomHeight = 8;
+        Random random = new Random(2134);
+        ArrayList<Room> rooms = new ArrayList<>(maxRooms);
+        while (rooms.size() != maxRooms) {
+            Room newRoom = Room.createRandomRoomInWorld(WIDTH, HEIGHT, maxRoomWidth, maxRoomHeight, random);
+            if (rooms.stream().noneMatch(e -> Room.isRoomOverlap(e, newRoom))) {
+                rooms.add(newRoom);
+            }
+        }
+        rooms.forEach(e -> e.drawRoom(finalWorldFrame, Tileset.WALL, Tileset.FLOOR));
         return finalWorldFrame;
+    }
+
+    private static TETile[][] getTeTilesWithNothing() {
+        return IntStream.range(0, WIDTH)
+                .mapToObj(w ->
+                        IntStream
+                                .range(0, HEIGHT)
+                                .mapToObj(h -> Tileset.NOTHING)
+                                .toArray(TETile[]::new))
+                .toArray(TETile[][]::new);
     }
 }
