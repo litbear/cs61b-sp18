@@ -8,22 +8,18 @@ import java.util.Random;
 import java.util.stream.IntStream;
 
 public class Room {
-    private static final int WALL_WIDTH = 1;
-    private static final int MIN_SIDE_LENGTH = WALL_WIDTH * 2 + 1;
 
     // 房间的左下角坐标
     private Position root;
 
-    // 房间的边长 包括墙壁
+    // 房间的边长 不包括墙壁
     private int width;
     private int height;
 
     Room(Position root, int width, int height) {
-        if (width < MIN_SIDE_LENGTH || height < MIN_SIDE_LENGTH) {
+        if (width < 1 || height < 1) {
             throw new IllegalArgumentException(
-                    String.format(
-                            "Width and height of the world must larger than %s.",
-                            MIN_SIDE_LENGTH));
+                            "Width and height of the world must larger than 1.");
         }
         this.root = root;
         this.width = width;
@@ -49,35 +45,73 @@ public class Room {
              Random random) {
         Room randRoom;
         do {
-            int randomX = RandomUtils.uniform(random, worldWidth);
-            int randomY = RandomUtils.uniform(random, worldHeight);
-            // ugly, don't ask me why
-            int randomWidth = RandomUtils.uniform(random, MIN_SIDE_LENGTH + 1, maxRoomWidth + 1);
-            int randomHeight = RandomUtils.uniform(random, MIN_SIDE_LENGTH  + 1, MaxRoomHeight + 1);
+            // [a, b)
+            int randomX = RandomUtils.uniform(random, 1, worldWidth - 1);
+            int randomY = RandomUtils.uniform(random, 1, worldHeight - 1);
+            int randomWidth = RandomUtils.uniform(random, 2, maxRoomWidth + 1);
+            int randomHeight = RandomUtils.uniform(random, 2, MaxRoomHeight + 1);
             randRoom = new Room(new Position(randomX, randomY), randomWidth, randomHeight);
         } while (!isInTheWorld(worldWidth, worldHeight, randRoom));
         return randRoom;
     }
 
+    public static void drawCorridor(
+            TETile[][] world,
+            TETile floor,
+            Random random,
+            Room r1,
+            Room r2) {
+        Position p1 = r1.getCenter();
+        Position p2 = r2.getCenter();
+        int randomInt = RandomUtils.uniform(random, 2);
+        // ugly...
+        int x, y, xMin, xMax, yMin, yMax;
+        if (randomInt == 0) {
+            // r1 hCorridor
+            y = p1.getyIndex();
+            xMin = p1.getxIndex() > p2.getxIndex()? p2.getxIndex(): p1.getxIndex();
+            xMax = p1.getxIndex() < p2.getxIndex()? p2.getxIndex(): p1.getxIndex();
+            IntStream.range(xMin, xMax + 1).forEach(e -> world[e][y] = floor);
+            // r2 vCorridor
+            x = p2.getxIndex();
+            yMin = p1.getyIndex() > p2.getyIndex()? p2.getyIndex(): p1.getyIndex();
+            yMax = p1.getyIndex() < p2.getyIndex()? p2.getyIndex(): p1.getyIndex();
+            IntStream.range(yMin, yMax + 1).forEach(e -> world[x][e] = floor);
+        } else {
+            // r1 vCorridor
+            x = p1.getxIndex();
+            yMin = p1.getyIndex() > p2.getyIndex()? p2.getyIndex(): p1.getyIndex();
+            yMax = p1.getyIndex() < p2.getyIndex()? p2.getyIndex(): p1.getyIndex();
+            IntStream.range(yMin, yMax + 1).forEach(e -> world[x][e] = floor);
+            // r2 hCorridor
+            y = p2.getyIndex();
+            xMin = p1.getxIndex() > p2.getxIndex()? p2.getxIndex(): p1.getxIndex();
+            xMax = p1.getxIndex() < p2.getxIndex()? p2.getxIndex(): p1.getxIndex();
+            IntStream.range(xMin, xMax + 1).forEach(e -> world[e][y] = floor);
+        }
+
+    }
+
     /**
      * 判断指定房间是否在给定的坐标系内
+     * (必须为房间外围留出1个宽度的围墙)
      *
      * @param worldWidth 坐标系宽度
      * @param worldHeight 坐标系长度
      * @param room 给定的房间
      * @return 判断结果
      */
-    private static boolean isInTheWorld(int worldWidth, int worldHeight, Room room) {
+    static boolean isInTheWorld(int worldWidth, int worldHeight, Room room) {
         if (room == null) {
             throw new IllegalArgumentException("The room is not nullable");
         }
+        Position root = room.getRoot();
+        Position rightTopPosition = room.getRightTopPosition();
 
-        if (worldWidth < MIN_SIDE_LENGTH || worldHeight < MIN_SIDE_LENGTH) {
-            throw new IllegalArgumentException(String.format("Width and height of the world must larger than %s.", MIN_SIDE_LENGTH));
-        }
-
-        return (room.getRightTopPosition().getxIndex() < (worldWidth - 1))
-                && (room.getRightTopPosition().getyIndex() < (worldHeight - 1));
+        return root.getxIndex() > 1
+                && root.getyIndex() > 1
+                && rightTopPosition.getxIndex() < worldWidth - 1
+                && rightTopPosition.getyIndex() < worldHeight - 1;
     }
 
 
@@ -108,27 +142,13 @@ public class Room {
 
     // -----------------------------------------------
 
-    public void drawRoom(TETile[][] world, TETile wall, TETile floor) {
+    public void drawRoom(TETile[][] world, TETile floor) {
         IntStream
                 .range(root.getxIndex(), root.getxIndex() + width)
                 .forEach(x -> IntStream
                             .range(root.getyIndex(), root.getyIndex() + height)
-                            .forEach(y -> {
-                                if (isInnerBlock(x, y))
-                                {
-                                    world[x][y] = floor;
-                                } else {
-                                    world[x][y] = wall;
-                                }
-                            })
+                            .forEach(y -> world[x][y] = floor)
                 );
-    }
-
-    private boolean isInnerBlock(int x, int y) {
-        return x >= root.getxIndex() + WALL_WIDTH
-                && x < root.getxIndex() + width - WALL_WIDTH
-                && y >= root.getyIndex() + WALL_WIDTH
-                && y < root.getyIndex() + height - WALL_WIDTH;
     }
 
     /**
@@ -151,18 +171,6 @@ public class Room {
                 root.getyIndex() + height - 1);
     }
 
-    public Position getRandomInnerPosition(Random random){
-        int randomX = RandomUtils.uniform(
-                random,
-                root.getxIndex() + WALL_WIDTH,
-                root.getxIndex() + width - WALL_WIDTH);
-        int randomY = RandomUtils.uniform(
-                random,
-                root.getyIndex() + WALL_WIDTH,
-                root.getyIndex() + height - WALL_WIDTH);
-        return  new Position(randomX, randomY);
-    }
-
 
     public Position getRoot() {
         return getLeftBottomPosition();
@@ -174,6 +182,10 @@ public class Room {
 
     public int getHeight() {
         return height;
+    }
+
+    public Position getCenter() {
+        return new Position(root.getxIndex() + width / 2, root.getyIndex() + height / 2);
     }
 
     @Override
