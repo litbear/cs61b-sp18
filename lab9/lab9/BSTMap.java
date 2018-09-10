@@ -122,12 +122,12 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
      */
     @Override
     public V remove(K key) {
-        V value = null;
-        root = remove(root, key, value);
-        if (value != null) {
+        Node node = new Node(null, null);
+        root = remove(root, key, node);
+        if (node.key != null) {
             size -= 1;
         }
-        return value;
+        return node.value;
     }
 
     private Node removeMax(Node node) {
@@ -136,21 +136,31 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         return node;
     }
 
-    private Node remove(Node node, K key, V value) {
+    private Node max(Node node) {
+        if (node.right == null) return node;
+        return max(node.right);
+    }
+
+    private Node remove(Node node, K key, Node payload) {
         if (node == null) return null;
         int cmp = key.compareTo(node.key);
 
         if (cmp < 0) {
-            node.left = remove(node.left, key, value);
+            node.left = remove(node.left, key, payload);
         } else if (cmp > 0) {
-            node.right = remove(node.right, key, value);
+            node.right = remove(node.right, key, payload);
         } else {
             if (node.right == null) return node.left;
             if (node.left == null) return node.right;
-//            Node temp =
-//            value = node.value;
+            Node temp = node;
+            node = max(node.right);
+            node.left = removeMax(temp.left);
+            node.right = temp.right;
 
+            payload.key = temp.key;
+            payload.value = temp.value;
         }
+        return node;
     }
 
     /** Removes the key-value entry for the specified key only if it is
