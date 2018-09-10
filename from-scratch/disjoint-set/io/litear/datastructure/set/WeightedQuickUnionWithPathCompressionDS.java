@@ -39,7 +39,7 @@ public class WeightedQuickUnionWithPathCompressionDS implements DisjointSet {
      */
     private int findRoot(int e) {
         int root = e;
-        
+
         while (parent[e] != e){
             root = parent[e];
         }
