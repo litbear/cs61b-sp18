@@ -7,6 +7,14 @@ import java.util.Set;
 /**
  * Implementation of interface Map61B with BST as core data structure.
  *
+ * 逐步开发共分以下步骤，并非按序实现
+ * 1. 递归方式 添加，查找
+ * 2. 递归方式 删除 void 以及  返回值为被删除元素
+ * 3. 包装对象实现 size
+ * 4. 递归实现 size
+ * 5. 合法性检验
+ * 6. 迭代方式实现 添加 查找 删除
+ *
  * @author Your name here
  */
 public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
@@ -88,9 +96,12 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
      */
     @Override
     public void put(K key, V value) {
-        if (key == null) throw new IllegalArgumentException("calls put() with a null key");
+        // putHelper 返回Node getHelper 和 get 却都返回V，
+        // 这样在允许插入null值的情况下无法判断是找到了一个null值还是根本不存在对应的键
+        if (key == null || value == null) throw new IllegalArgumentException("calls put() with a null key or value");
         root = putHelper(key, value, root);
         size += 1;
+        assert check();
     }
 
     /* Returns the number of key-value mappings in this map. */
@@ -122,12 +133,29 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
      */
     @Override
     public V remove(K key) {
-        Node node = new Node(null, null);
-        root = remove(root, key, node);
-        if (node.key != null) {
+        V removed = get(key);
+        if (removed != null) {
+            root = remove(root, key);
             size -= 1;
+            assert check();
         }
-        return node.value;
+        return removed;
+    }
+
+    /** Removes the key-value entry for the specified key only if it is
+     *  currently mapped to the specified value.  Returns the VALUE removed,
+     *  null on failed removal.
+     **/
+    @Override
+    public V remove(K key, V value) {
+        if (value == null) throw new IllegalArgumentException("calls remove() with a null value");
+        V removed = get(key);
+        if (value.equals(removed)) {
+            root = remove(root, key);
+            size -= 1;
+            assert check();
+        }
+        return null;
     }
 
     private Node removeMax(Node node) {
@@ -141,39 +169,49 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         return max(node.right);
     }
 
-    private Node remove(Node node, K key, Node payload) {
+    private Node remove(Node node, K key) {
         if (node == null) return null;
         int cmp = key.compareTo(node.key);
-
         if (cmp < 0) {
-            node.left = remove(node.left, key, payload);
+            node.left = remove(node.left, key);
         } else if (cmp > 0) {
-            node.right = remove(node.right, key, payload);
+            node.right = remove(node.right, key);
         } else {
             if (node.right == null) return node.left;
             if (node.left == null) return node.right;
             Node temp = node;
-            node = max(node.right);
+            node = max(node.left);
             node.left = removeMax(temp.left);
             node.right = temp.right;
-
-            payload.key = temp.key;
-            payload.value = temp.value;
         }
         return node;
-    }
-
-    /** Removes the key-value entry for the specified key only if it is
-     *  currently mapped to the specified value.  Returns the VALUE removed,
-     *  null on failed removal.
-     **/
-    @Override
-    public V remove(K key, V value) {
-        throw new UnsupportedOperationException();
     }
 
     @Override
     public Iterator<K> iterator() {
         throw new UnsupportedOperationException();
     }
+
+    //-----------------------数据结构合法性检验------------------------------
+
+    private boolean check() {
+        return
+        // 概念检验
+        isBST();
+        // size 检验
+        // rank 检验
+    }
+
+    private boolean isBST() {
+        return isBST(root, null, null);
+    }
+
+    private boolean isBST(Node node, K min, K max) {
+        if (node == null) return true;
+        if (min != null && node.key.compareTo(min) <= 0) return false;
+        if (max != null && node.key.compareTo(max) >= 0) return false;
+        return isBST(node.left, min, node.key) && isBST(node.right, node.key, max);
+    }
+
+
 }

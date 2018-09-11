@@ -5,13 +5,16 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import lab9.BSTMap;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Tests by Brendan Hu, Spring 2015, revised for 2018 by Josh Hug
  */
 public class TestBSTMap {
+
+    private static Random random = new Random(147258L);
 
     @Test
     public void sanityGenericsTest() {
@@ -91,15 +94,34 @@ public class TestBSTMap {
 
     @Test
     public void keySetTest() {
-        BSTMap<String, Integer> b = new BSTMap<String, Integer>();
+        BSTMap<String, String> b = new BSTMap<>();
         Set<String> stringSet = new HashSet<>();
-        for (int i = 0; i < 455; i++) {
-            b.put("hi" + i, 1);
-            stringSet.add("hi" + i);
-        }
-        for (String s: b.keySet()) {
-            assertTrue(stringSet.contains(s));
-        }
+        List<Integer> integerList = IntStream.range(0, 30).boxed().collect(Collectors.toList());
+        Collections.shuffle(integerList, random);
+        integerList.forEach(e -> {
+            b.put("hi" + e, "hello" + e);
+            stringSet.add("hi" + e);
+        });
+        assertTrue(stringSet.containsAll(b.keySet()));
+        assertTrue(b.keySet().containsAll(stringSet));
+    }
+
+    @Test
+    public void removeTest() {
+        BSTMap<String, String> b = new BSTMap<>();
+        List<Integer> integerList = IntStream.range(0, 30).boxed().collect(Collectors.toList());
+        Collections.shuffle(integerList, random);
+        integerList.forEach(e -> {
+            b.put("hi" + e, "hello" + e);
+        });
+        assertEquals(30, b.size());
+        b.remove("hi11");
+        assertEquals(29, b.size());
+        b.remove("hi15", "hello15");
+        assertEquals(28, b.size());
+        String removed = b.remove("hi9", "Hello1118");
+        assertNull(removed);
+        assertEquals(28, b.size());
     }
 
     public static void main(String[] args) {
