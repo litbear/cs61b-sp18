@@ -99,8 +99,8 @@ public class TestBSTMap {
         List<Integer> integerList = IntStream.range(0, 30).boxed().collect(Collectors.toList());
         Collections.shuffle(integerList, random);
         integerList.forEach(e -> {
-            b.put("hi" + e, "hello" + e);
-            stringSet.add("hi" + e);
+            b.put(String.format("hi%02d", e), String.format("hello%02d", e));
+            stringSet.add(String.format("hi%02d", e));
         });
         assertTrue(stringSet.containsAll(b.keySet()));
         assertTrue(b.keySet().containsAll(stringSet));
@@ -111,9 +111,7 @@ public class TestBSTMap {
         BSTMap<String, String> b = new BSTMap<>();
         List<Integer> integerList = IntStream.range(0, 30).boxed().collect(Collectors.toList());
         Collections.shuffle(integerList, random);
-        integerList.forEach(e -> {
-            b.put("hi" + e, "hello" + e);
-        });
+        integerList.forEach(e -> b.put(String.format("hi%02d", e), String.format("hello%02d", e)));
         assertEquals(30, b.size());
         b.remove("hi11");
         assertEquals(29, b.size());
@@ -122,6 +120,26 @@ public class TestBSTMap {
         String removed = b.remove("hi9", "Hello1118");
         assertNull(removed);
         assertEquals(28, b.size());
+    }
+
+    @Test
+    public void printTest(){
+        BSTMap<String, String> b = new BSTMap<>();
+        List<Integer> integerList = IntStream.range(0, 30).boxed().collect(Collectors.toList());
+        Collections.shuffle(integerList, random);
+        integerList.forEach(e -> b.put(String.format("hi%02d", e), String.format("hello%02d", e)));
+        b.print();
+    }
+
+    @Test
+    public void iteratorTest(){
+        BSTMap<String, String> b = new BSTMap<>();
+        List<Integer> integerList = IntStream.range(0, 30).boxed().collect(Collectors.toList());
+        Collections.shuffle(integerList, random);
+        integerList.forEach(e -> b.put(String.format("hi%02d", e), String.format("hello%02d", e)));
+        for (String s: b) {
+            System.out.println(s);
+        }
     }
 
     public static void main(String[] args) {

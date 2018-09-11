@@ -3,6 +3,9 @@ package lab9;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.Stack;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Implementation of interface Map61B with BST as core data structure.
@@ -158,12 +161,17 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         return null;
     }
 
+    /**
+     * 这个要重点理解 很晦涩
+     *
+     * @param node 待操作二叉树节点
+     * @return 去除最大元素后的二叉树
+     */
     private Node removeMax(Node node) {
         if (node.right == null) return node.left;
         node.right = removeMax(node.right);
         return node;
     }
-
     private Node max(Node node) {
         if (node.right == null) return node;
         return max(node.right);
@@ -189,7 +197,49 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
 
     @Override
     public Iterator<K> iterator() {
-        throw new UnsupportedOperationException();
+        return new BSTIterator();
+    }
+
+    private class BSTIterator implements Iterator<K>{
+
+        Stack<Node> nodeStack = new Stack<>();
+
+        BSTIterator() {
+            push(root);
+        }
+
+        private void push(Node node){
+            while (node != null) {
+                nodeStack.push(node);
+                node = node.left;
+            }
+        }
+
+        @Override
+        public boolean hasNext() {
+            return !nodeStack.isEmpty();
+        }
+
+        @Override
+        public K next() {
+            Node node = nodeStack.pop();
+            push(node.right);
+            return node.key;
+        }
+    }
+
+    public void print() {
+        print(root, 0);
+    }
+
+    private void print(Node node, int i) {
+        if (node == null){
+            return;
+        }
+        print(node.left, i + 1);
+        String indent = IntStream.range(0, i).mapToObj(e -> "-").collect(Collectors.joining(""));
+        System.out.println(indent + ">" + node.key);
+        print(node.right, i + 1);
     }
 
     //-----------------------数据结构合法性检验------------------------------
