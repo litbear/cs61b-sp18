@@ -71,6 +71,13 @@ const remove = (node, key) => {
     return node
 }
 
+function* iter(node) {
+    if(node === null) return
+    yield *iter(node.left)
+    yield node.key
+    yield *iter(node.right)
+}
+
 BST.prototype.get = function(key) {
     return get(this.root, key)
 }
@@ -88,7 +95,9 @@ BST.prototype.print = function() {
     print(this.root, 0)
 }
 
-// BST.prototype[Symbol.iterator]
+BST.prototype[Symbol.iterator] = function() {
+    return iter(this.root)
+}
 
 
 //-----------------------------------------------------------------------------------
@@ -107,9 +116,6 @@ let btree = new BST()
 
 array.forEach(e => btree.put(e, `${e}value`))
 
-btree.print()
-
-btree.remove(3)
-console.log('-----------------')
-
-btree.print()
+for(let i of btree) {
+    console.log(i, btree.get(i))
+}
