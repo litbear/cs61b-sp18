@@ -116,8 +116,9 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 
         // 因为以下步骤在 node.left = put(node.left, key, value); 之后
         // 所以，不会产生 node.left.left 空指针问题
-
-//        if (isRed(node.left))
+        if (!isRed(node.left) && isRed(node.right)) node = rotateLeft(node);
+        if (isRed(node.left) && isRed(node.left.left)) node = rotateRight(node);
+        if (isRed(node.left) && isRed(node.right)) flipColors(node);
 
         return node;
     }

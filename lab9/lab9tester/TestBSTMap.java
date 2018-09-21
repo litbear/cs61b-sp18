@@ -6,8 +6,10 @@ import org.junit.Test;
 import lab9.BSTMap;
 
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 /**
  * Tests by Brendan Hu, Spring 2015, revised for 2018 by Josh Hug
@@ -140,6 +142,67 @@ public class TestBSTMap {
         for (String s: b) {
             System.out.println(s);
         }
+    }
+
+    @Test
+    public void streamTest() {
+        Stream<String> stringStream = Stream.of("a,b", "cd,", "e,f");
+        stringStream
+                .map(e -> Stream.of(e.split(",")))
+                .reduce(Stream::concat)
+                .orElseGet(Stream::empty)
+                .forEach(System.out::println);
+    }
+
+    @Test
+    public void emptyStreamTest() {
+        Stream<String> stringStream = Stream.of();
+        assertNull(stringStream.findFirst().orElse(null));
+        Stream<String> stringStream2 = Stream.of("a");
+        assertNotNull(stringStream2.findFirst().orElse(null));
+    }
+
+    @Test
+    public void byteSignTest() {
+        // sign -2 unsign 254
+        byte a = (byte) 0xfe;  // -2
+        int e = a;
+        System.out.println("---->" + e); // -2
+        int b = a & 0xff; // 254
+        System.out.println(b);
+
+        int c = 0xfffffffe; // int -2
+        System.out.println(c); // -2
+        System.out.println(c % 13); // -2
+        int d = c & 0x7fffffff; // int 2147483646
+        System.out.println(d); // 2147483646
+        System.out.println(d % 13); // 9
+        System.out.println(Math.floorMod(d, 13)); // 9
+
+    }
+
+    @Test
+    public void shiftTest() {
+        int a = -8;
+        System.out.println(a >> 2);
+        System.out.println(a >>> 2);
+        System.out.println(((-8) >> 2) + (2 << ~2));
+    }
+
+    @Test
+    public void BitwiseComplementOperatorTest() {
+//        int a = -2;
+//        int b = (~a) + 1;
+//        System.out.println(b);
+        System.out.println(String.format("%32s", Integer.toBinaryString(16)).replace(' ', '0'));
+        System.out.println(String.format("%32s", Integer.toBinaryString(16 >> 2)).replace(' ', '0'));
+        System.out.println(String.format("%32s", Integer.toBinaryString(16 >>> 2)).replace(' ', '0'));
+        System.out.println("--------------");
+        System.out.println(String.format("%32s", Integer.toBinaryString(-16)).replace(' ', '0'));
+        System.out.println(-16 >> 2);
+        System.out.println(String.format("%32s", Integer.toBinaryString(-16 >> 2)).replace(' ', '0'));
+        System.out.println(-16 >>> 2);
+        System.out.println(String.format("%32s", Integer.toBinaryString(-16 >>> 2)).replace(' ', '0'));
     }
 
     public static void main(String[] args) {
