@@ -164,13 +164,6 @@ public class TestBSTMap {
 
     @Test
     public void byteSignTest() {
-        // sign -2 unsign 254
-        byte a = (byte) 0xfe;  // -2
-        int e = a;
-        System.out.println("---->" + e); // -2
-        int b = a & 0xff; // 254
-        System.out.println(b);
-
         int c = 0xfffffffe; // int -2
         System.out.println(c); // -2
         System.out.println(c % 13); // -2
@@ -178,7 +171,20 @@ public class TestBSTMap {
         System.out.println(d); // 2147483646
         System.out.println(d % 13); // 9
         System.out.println(Math.floorMod(d, 13)); // 9
+//        Integer.MAX_VALUE
+    }
 
+    @Test
+    public void specTest() {
+        // sign -2 unsign 254
+        byte a = (byte) 0xfe;  // -2
+        System.out.println(a); // -2
+        int b = a & 0xff; // 254
+        System.out.println(b);
+
+
+        byte c = (byte) -0xfe;
+        System.out.println(c);
     }
 
     @Test
