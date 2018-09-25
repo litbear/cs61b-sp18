@@ -183,32 +183,41 @@ public class TestBSTMap {
         System.out.println(b);
 
 
-        byte c = (byte) -0xfe;
-        System.out.println(c);
     }
 
     @Test
     public void shiftTest() {
-        int a = -8;
-        System.out.println(a >> 2);
-        System.out.println(a >>> 2);
-        System.out.println(((-8) >> 2) + (2 << ~2));
+        System.out.println(-256 >>> 3);
+        System.out.println((-256 >> 3) + (2 << ~3));
     }
 
     @Test
     public void BitwiseComplementOperatorTest() {
-//        int a = -2;
-//        int b = (~a) + 1;
-//        System.out.println(b);
-        System.out.println(String.format("%32s", Integer.toBinaryString(16)).replace(' ', '0'));
-        System.out.println(String.format("%32s", Integer.toBinaryString(16 >> 2)).replace(' ', '0'));
-        System.out.println(String.format("%32s", Integer.toBinaryString(16 >>> 2)).replace(' ', '0'));
+        System.out.println(
+                String.format("%32s", Integer.toBinaryString(256)).replace(' ', '0')
+                        + " -->  256       = " + String.valueOf(256)
+        );
+        System.out.println(
+                String.format("%32s", Integer.toBinaryString(256 >> 3)).replace(' ', '0')
+                        + " -->  256 >> 3  = " + String.valueOf(256 >> 3)
+        );
+        System.out.println(
+                String.format("%32s", Integer.toBinaryString(256 >>> 3)).replace(' ', '0')
+                        + " -->  256 >>> 3 = " + String.valueOf(256 >>> 3)
+        );
         System.out.println("--------------");
-        System.out.println(String.format("%32s", Integer.toBinaryString(-16)).replace(' ', '0'));
-        System.out.println(-16 >> 2);
-        System.out.println(String.format("%32s", Integer.toBinaryString(-16 >> 2)).replace(' ', '0'));
-        System.out.println(-16 >>> 2);
-        System.out.println(String.format("%32s", Integer.toBinaryString(-16 >>> 2)).replace(' ', '0'));
+        System.out.println(
+                String.format("%32s", Integer.toBinaryString(-256)).replace(' ', '0')
+                        + " --> -256       = " + String.valueOf(-256)
+        );
+        System.out.println(
+                String.format("%32s", Integer.toBinaryString(-256 >> 3)).replace(' ', '0')
+                        + " --> -256 >> 3  = " + String.valueOf(-256 >> 3)
+        );
+        System.out.println(
+                String.format("%32s", Integer.toBinaryString(-256 >>> 3)).replace(' ', '0')
+                        + " --> -256 >>> 3 = " + String.valueOf(-256 >>> 3)
+        );
     }
 
     public static void main(String[] args) {
