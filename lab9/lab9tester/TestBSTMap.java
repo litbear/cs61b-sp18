@@ -172,6 +172,7 @@ public class TestBSTMap {
         System.out.println(d % 13); // 9
         System.out.println(Math.floorMod(d, 13)); // 9
 //        Integer.MAX_VALUE
+        System.out.println(Math.floorMod(-1, 13));
     }
 
     @Test
