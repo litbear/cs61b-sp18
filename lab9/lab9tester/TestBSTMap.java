@@ -144,6 +144,8 @@ public class TestBSTMap {
         }
     }
 
+    // --------------其他测试-----------------
+
     @Test
     public void streamTest() {
         Stream<String> stringStream = Stream.of("a,b", "cd,", "e,f");
@@ -164,15 +166,10 @@ public class TestBSTMap {
 
     @Test
     public void byteSignTest() {
-        int c = 0xfffffffe; // int -2
-        System.out.println(c); // -2
-        System.out.println(c % 13); // -2
-        int d = c & 0x7fffffff; // int 2147483646
-        System.out.println(d); // 2147483646
-        System.out.println(d % 13); // 9
-        System.out.println(Math.floorMod(d, 13)); // 9
-//        Integer.MAX_VALUE
-        System.out.println(Math.floorMod(-1, 13));
+        System.out.println(-2); // -2
+        System.out.println(-2 % 13); // -2
+        System.out.println((-2 & 0x7fffffff) % 13); // 9
+        System.out.println(Math.floorMod((-2 & 0x7fffffff), 13)); // 9
     }
 
     @Test

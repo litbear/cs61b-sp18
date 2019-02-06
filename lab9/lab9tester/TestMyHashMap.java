@@ -5,10 +5,15 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import lab9.MyHashMap;
 
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 /**
  * Tests by Brendan Hu, Spring 2015, revised for 2018 by Josh Hug
  */
 public class TestMyHashMap {
+    private static Random random = new Random(147258L);
 
     @Test
     public void sanityGenericsTest() {
@@ -125,6 +130,37 @@ public class TestMyHashMap {
         studentIDs.put("evil alan", 345);
         assertEquals(345, studentIDs.get("evil alan").intValue());
         assertEquals(studentIDs.get("evil alan"), studentIDs.get("alan"));
+    }
+
+
+    @Test
+    public void keySetTest() {
+        MyHashMap<String, String> myHashMap = new MyHashMap<>();
+        Set<String> stringSet = new HashSet<>();
+        List<Integer> integerList = IntStream.range(0, 30).boxed().collect(Collectors.toList());
+        Collections.shuffle(integerList, random);
+        integerList.forEach(e -> {
+            myHashMap.put(String.format("hi%02d", e), String.format("hello%02d", e));
+            stringSet.add(String.format("hi%02d", e));
+        });
+        assertTrue(stringSet.containsAll(myHashMap.keySet()));
+        assertTrue(myHashMap.keySet().containsAll(stringSet));
+    }
+
+    @Test
+    public void removeTest() {
+        MyHashMap<String, String> b = new MyHashMap<>();
+        List<Integer> integerList = IntStream.range(0, 30).boxed().collect(Collectors.toList());
+        Collections.shuffle(integerList, random);
+        integerList.forEach(e -> b.put(String.format("hi%02d", e), String.format("hello%02d", e)));
+        assertEquals(30, b.size());
+        b.remove("hi11");
+        assertEquals(29, b.size());
+        b.remove("hi15", "hello15");
+        assertEquals(28, b.size());
+        String removed = b.remove("hi9", "Hello1118");
+        assertNull(removed);
+        assertEquals(28, b.size());
     }
 
     public static void main(String[] args) {
