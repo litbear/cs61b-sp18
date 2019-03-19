@@ -10,17 +10,52 @@ package nov.practise.set;
 
 @SuppressWarnings("Duplicates")
 public class LLRB<Key extends Comparable<Key>, Value> {
+
+    private static final boolean RED = true;
+    private static final boolean BLACK = false;
+
     private Node root;
     private class Node {
         private Key key;
         private Value value;
         private Node left;
         private Node right;
+        private boolean color;
 
-        public Node(Key key, Value value) {
+        Node(Key key, Value value) {
             this.key = key;
             this.value = value;
+            this.color = RED;
         }
+    }
+
+    private boolean isRed(Node node) {
+        if (null == node) return false;
+        return node.color == RED;
+    }
+
+    private Node rotateLeft(Node node) {
+        Node x = node.right;
+        node.right = x.left;
+        x.left = node;
+        x.color = node.color;
+        node.color = RED;
+        return x;
+    }
+
+    private Node rotateRight(Node node) {
+        Node x = node.left;
+        node.left = x.right;
+        x.right = node;
+        x.color = node.color;
+        node.color = RED;
+        return x;
+    }
+
+    private void flipColors(Node node) {
+        node.left.color = !node.left.color;
+        node.right.color = !node.right.color;
+        node.color = !node.color;
     }
 
     public LLRB() {
@@ -45,6 +80,7 @@ public class LLRB<Key extends Comparable<Key>, Value> {
     public void insert(Key key, Value value) {
         if (key == null) throw new IllegalArgumentException("calls insert() with a null key");
         root = insert(root, key, value);
+        root.color = BLACK;
     }
 
     private Node insert(Node node, Key key, Value value) {
@@ -57,6 +93,11 @@ public class LLRB<Key extends Comparable<Key>, Value> {
         } else {
             node.value = value;
         }
+
+        if (!isRed(node.left) && isRed(node.right)) node = rotateLeft(node);
+        if (isRed(node.left) && isRed(node.left.left)) node = rotateRight(node);
+        if (isRed(node.left) && isRed(node.right)) flipColors(node);
+
         return node;
     }
 }

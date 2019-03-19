@@ -34,6 +34,7 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
      * @return 操作后的节点
      */
     private Node rotateLeft(Node h) {
+        // null 检查根本不用加，因为put方法内已经使用isRed(node.right)为true对h的右节点的非空性进行了检查
         if (h == null) return null;
         Node x = h.right;
         h.right = x.left;
@@ -50,6 +51,7 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
      * @return 操作后的节点
      */
     private Node rotateRight(Node h) {
+        // null 检查根本不用加，因为put方法内已经使用isRed()为true对h的非空性进行了检查
         if (h == null) return null;
         Node x = h.left;
         h.left = x.right;
@@ -65,6 +67,7 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
      * @param node 待操作节点
      */
     private void flipColors(Node node) {
+        // null 检查根本不用加，因为isRed方法已经将null识别为BLACK了
         if (node == null) return;
         node.color = !node.color;
         node.right.color = !node.right.color;
@@ -114,8 +117,8 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
             node.value = value;
         }
 
-        // 因为以下步骤在 node.left = put(node.left, key, value); 之后
-        // 所以，不会产生 node.left.left 空指针问题
+        // 首先 if (node == null) return 这一步拦截了所有的null，执行到这一行以下的node都是Node实例
+        // 其次 既然node都是Node实例了，那么node.left.left就不会产生NullPointer
         if (!isRed(node.left) && isRed(node.right)) node = rotateLeft(node);
         if (isRed(node.left) && isRed(node.left.left)) node = rotateRight(node);
         if (isRed(node.left) && isRed(node.right)) flipColors(node);
