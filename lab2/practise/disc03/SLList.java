@@ -80,6 +80,14 @@ public class SLList {
             // 更新指针
             pointer = rest;
         }
+
+        // 另一种解法
+        // while (first != null) {
+        //     IntNode newListFirst = first;
+        //     first = first.next;
+        //     newListFirst.next = newList;
+        //     newList = newListFirst;
+        // }
         // 更新裸链表
         first = newList;
     }
