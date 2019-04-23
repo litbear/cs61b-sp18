@@ -1,4 +1,4 @@
-package io.litear.datastructure.graph;
+package io.litbear.datastructure.graph;
 
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdOut;

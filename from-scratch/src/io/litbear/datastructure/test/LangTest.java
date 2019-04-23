@@ -1,4 +1,4 @@
-package io.litear.datastructure.test;
+package io.litbear.datastructure.test;
 
 import org.junit.Test;
 

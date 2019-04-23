@@ -1,4 +1,4 @@
-package io.litear.datastructure.graph;
+package io.litbear.datastructure.graph;
 
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdOut;
@@ -20,7 +20,7 @@ public class DepthFirstPaths {
 
     private void dfs(Graph G, int v) {
         marked[v] = true;
-        for (int w: G.adj(v)) {
+        for (int w : G.adj(v)) {
             if (!marked[w]) {
                 edgeTo[w] = v;
                 dfs(G, w);

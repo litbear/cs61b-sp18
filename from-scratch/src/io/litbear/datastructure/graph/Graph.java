@@ -1,4 +1,4 @@
-package io.litear.datastructure.graph;
+package io.litbear.datastructure.graph;
 
 /******************************************************************************
  *  Compilation:  javac Graph.java

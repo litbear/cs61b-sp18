@@ -1,9 +1,15 @@
-package io.litear.datastructure.graph;
+package io.litbear.datastructure.graph;
 
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.Queue;
 import edu.princeton.cs.algs4.StdOut;
 
+/**
+ *
+ * 连通分量， 对图中每个(未被标记的)节点依次进行深度优先搜索，
+ * 以求出子图的数量，并找出每个子图中的节点
+ *
+ */
 public class CC {
     private boolean[] marked;   // marked[v] = has vertex v been marked?
     private int[] id;           // id[v] = id of connected component containing v

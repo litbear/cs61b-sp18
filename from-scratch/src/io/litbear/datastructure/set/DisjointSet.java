@@ -1,4 +1,4 @@
-package io.litear.datastructure.set;
+package io.litbear.datastructure.set;
 
 public interface DisjointSet {
 

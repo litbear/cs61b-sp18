@@ -1,7 +1,4 @@
-package io.litear.datastructure.set;
-
-import java.util.Arrays;
-import java.util.stream.IntStream;
+package io.litbear.datastructure.set;
 
 public class QuickFindDS implements DisjointSet {
 

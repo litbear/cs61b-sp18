@@ -1,4 +1,4 @@
-package io.litear.datastructure.tree;
+package io.litbear.datastructure.tree;
 
 public class RedBlackBST<Key extends Comparable<Key>, Value> {
     private static final boolean RED = true;

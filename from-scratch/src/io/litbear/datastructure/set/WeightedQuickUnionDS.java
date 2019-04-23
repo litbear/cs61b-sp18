@@ -1,16 +1,20 @@
-package io.litear.datastructure.set;
+package io.litbear.datastructure.set;
 
-public class QuickUnionDS implements DisjointSet{
+public class WeightedQuickUnionDS implements DisjointSet {
 
+    private int[] weight;
     private int[] parent;
 
-    public QuickUnionDS(int n) {
+    public WeightedQuickUnionDS(int n) {
+        weight = new int[n];
         parent = new int[n];
 
-        for(int i = 0; i < n; i += 1) {
+        for (int i = 0; i < n; i += 1) {
+            weight[i] = 1;
             parent[i] = i;
         }
     }
+
 
     /**
      * 查找元素在集合内的根节点
@@ -29,7 +33,13 @@ public class QuickUnionDS implements DisjointSet{
     public void connect(int p, int q) {
         int pRoot = findRoot(p);
         int qRoot = findRoot(q);
-        parent[pRoot] = qRoot;
+        if (weight[pRoot] > weight[qRoot]) {
+            parent[qRoot] = pRoot;
+            weight[pRoot] += weight[qRoot];
+        } else {
+            parent[pRoot] = qRoot;
+            weight[qRoot] += weight[pRoot];
+        }
     }
 
     @Override

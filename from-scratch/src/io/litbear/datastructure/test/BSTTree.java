@@ -1,9 +1,7 @@
-package io.litear.datastructure.test;
+package io.litbear.datastructure.test;
 
-import io.litear.datastructure.tree.BST;
+import io.litbear.datastructure.tree.BST;
 import org.junit.Test;
-
-import java.util.Arrays;
 
 public class BSTTree {
 
