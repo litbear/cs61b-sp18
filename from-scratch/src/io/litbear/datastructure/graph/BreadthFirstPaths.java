@@ -16,6 +16,7 @@ public class BreadthFirstPaths {
     public BreadthFirstPaths(Graph G, int s){
         marked = new boolean[G.V()];
         edgeTo = new int[G.V()];
+        distTo = new int[G.V()];
         for (int v = 0; v < G.V(); v++)
             distTo[v] = INFINITY;
         bfs(G, s);
