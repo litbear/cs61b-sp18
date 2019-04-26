@@ -38,6 +38,7 @@ public class Maze {
 
     private void init() {
         // initialize border cells as already visited
+        // 标记边框为true 即为已访问，在generate的时候不会画到围墙内
         visited = new boolean[n+2][n+2];
         for (int x = 0; x < n+2; x++) {
             visited[x][0] = true;
@@ -50,6 +51,7 @@ public class Maze {
 
 
         // initialze all walls as present
+        // 初始化每个cell的东西南北四面墙，都为true，即有墙
         north = new boolean[n+2][n+2];
         east  = new boolean[n+2][n+2];
         south = new boolean[n+2][n+2];
@@ -70,12 +72,15 @@ public class Maze {
         visited[x][y] = true;
 
         // while there is an unvisited neighbor
+        // 只要东西南北四个邻居中有没被访问的就去访问
         while (!visited[x][y+1] || !visited[x+1][y] || !visited[x][y-1] || !visited[x-1][y]) {
 
             // pick random neighbor (could use Knuth's trick instead)
+            // 东西南北随机选择，直到选择到没被访问的
             while (true) {
                 double r = StdRandom.uniform(4);
                 if (r == 0 && !visited[x][y+1]) {
+                    // 破墙
                     north[x][y] = false;
                     south[x][y+1] = false;
                     generate(x, y + 1);
@@ -105,6 +110,7 @@ public class Maze {
 
     // generate the maze starting from lower left
     private void generate() {
+        // 默认从1,1 点开始
         generate(1, 1);
 
 /*
@@ -129,6 +135,7 @@ public class Maze {
 
     // solve the maze using depth-first search
     private void solve(int x, int y) {
+        // 围墙不能进
         if (x == 0 || y == 0 || x == n+1 || y == n+1) return;
         if (done || visited[x][y]) return;
         visited[x][y] = true;
@@ -139,6 +146,7 @@ public class Maze {
         StdDraw.pause(30);
 
         // reached middle
+        // 终点写死为中心点
         if (x == n/2 && y == n/2) done = true;
 
         if (!north[x][y]) solve(x, y + 1);
@@ -156,6 +164,7 @@ public class Maze {
 
     // solve the maze starting from the start state
     public void solve() {
+        // 重置所有cell为未访问
         for (int x = 1; x <= n; x++)
             for (int y = 1; y <= n; y++)
                 visited[x][y] = false;
@@ -165,10 +174,12 @@ public class Maze {
 
     // draw the maze
     public void draw() {
+        // 标记起始点和结束点
         StdDraw.setPenColor(StdDraw.RED);
         StdDraw.filledCircle(n/2.0 + 0.5, n/2.0 + 0.5, 0.375);
         StdDraw.filledCircle(1.5, 1.5, 0.375);
 
+        // 画墙
         StdDraw.setPenColor(StdDraw.BLACK);
         for (int x = 1; x <= n; x++) {
             for (int y = 1; y <= n; y++) {
