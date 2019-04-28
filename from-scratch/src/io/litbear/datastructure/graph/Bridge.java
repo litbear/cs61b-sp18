@@ -46,6 +46,7 @@ public class Bridge {
             if (pre[w] == -1) {
                 dfs(G, v, w);
                 // 递归后执行
+                // 即，在v的每个子节点w查找后，以
                 low[v] = Math.min(low[v], low[w]);
                 if (low[w] == pre[w]) {
                     StdOut.println(v + "-" + w + " is a bridge");
@@ -61,10 +62,17 @@ public class Bridge {
 
     // test client
     public static void main(String[] args) {
-        int V = Integer.parseInt(args[0]);
-        int E = Integer.parseInt(args[1]);
-        Graph G = GraphGenerator.simple(V, E);
-        StdOut.println(G);
+//        int V = Integer.parseInt(args[0]);
+//        int E = Integer.parseInt(args[1]);
+//        Graph G = GraphGenerator.simple(V, E);
+//        StdOut.println(G);
+
+        Graph G = new Graph(5);
+        G.addEdge(0, 1);
+        G.addEdge(1, 2);
+        G.addEdge(2, 3);
+        G.addEdge(3, 4);
+        G.addEdge(4, 1);
 
         Bridge bridge = new Bridge(G);
         StdOut.println("Edge connected components = " + bridge.components());

@@ -6,6 +6,7 @@ import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.Stack;
 
 
+@SuppressWarnings("Duplicates")
 public class DepthFirstPaths {
     private boolean[] marked;    // marked[v] = is there an s-v path?
     private int[] edgeTo;        // edgeTo[v] = last edge on s-v path
@@ -41,6 +42,11 @@ public class DepthFirstPaths {
     public Iterable<Integer> pathTo(int v) {
         if (!hasPathTo(v)) return null;
         Stack<Integer> path = new Stack<>();
+        /**
+         * 为什么测试条件是`x != s`，而不利用初始值0 `x != 0`?
+         * 因为edgeTo是结合marked使用的，只有被marked的才有实际意义
+         * 如果使用0判断，则有可能存在某个边 x 使得 `edgeTo[x] == 0`
+         */
         for (int x = v; x != s; x = edgeTo[x])
             path.push(x);
         path.push(s);
