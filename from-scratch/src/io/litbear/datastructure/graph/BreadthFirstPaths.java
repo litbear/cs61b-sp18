@@ -93,8 +93,11 @@ public class BreadthFirstPaths {
 
         if (!hasPathTo(v)) return null;
         Stack<Integer> stack = new Stack<>();
-        // 可以用for循环改写
-        // 注意，因为本类允许有多个起始节点，因此while循环的终点为"指向它的节点为0"
+        /**
+         * 可以用for循环改写
+         * 注意，因为本类允许有多个起始节点，因此while循环的终点为"与起点相隔0条路径的点"
+         * 另外注意，使用`edgeTo[x] == 0` 去判断，因为序号为0的节点是有实际意义的
+         */
         int x = v;
         while (distTo[x] != 0) {
             stack.push(x);

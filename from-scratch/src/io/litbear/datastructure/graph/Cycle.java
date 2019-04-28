@@ -47,7 +47,7 @@ public class Cycle {
         for (int v = 0; v < G.V(); v++) {
 
             // check for parallel edges incident to v
-            // 一旦在一个邻接列表出现两次同意变量，即判定有平行边
+            // 一旦在一个邻接列表出现两次同一变量，即判定有平行边
             for (int w : G.adj(v)) {
                 if (marked[w]) {
                     cycle = new Stack<Integer>();
