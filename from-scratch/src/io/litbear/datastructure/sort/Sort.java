@@ -59,7 +59,10 @@ public class Sort {
 //        Selection.sort(a);
 //        Insertion.sort(a);
 //        Shell.sort(a);
-        BinaryInsertion.sort(a);
+//        BinaryInsertion.sort(a);
+//        Merge.sort(a);
+//        MergeX.sort(a);
+        MergeBU.sort(a);
         show(a);
 
 //         desc
@@ -68,7 +71,10 @@ public class Sort {
 //        Selection.sort(a, desc);
 //        Insertion.sort(a, desc);
 //        Shell.sort(a, desc);
-        BinaryInsertion.sort(a, desc);
+//        BinaryInsertion.sort(a, desc);
+//        Merge.sort(a, desc);
+//        MergeX.sort(a, desc);
+        MergeBU.sort(a, desc);
         show(a);
     }
 }

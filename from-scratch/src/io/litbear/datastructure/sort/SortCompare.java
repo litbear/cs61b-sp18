@@ -1,10 +1,10 @@
 package io.litbear.datastructure.sort;
 
 // 注意，这里的排序方法都使用课程代码库中的代码
-import edu.princeton.cs.algs4.*;
-//import edu.princeton.cs.algs4.StdOut;
-//import edu.princeton.cs.algs4.StdRandom;
-//import edu.princeton.cs.algs4.Stopwatch;
+//import edu.princeton.cs.algs4.*;
+import edu.princeton.cs.algs4.StdOut;
+import edu.princeton.cs.algs4.StdRandom;
+import edu.princeton.cs.algs4.Stopwatch;
 
 import java.util.Arrays;
 
@@ -40,8 +40,8 @@ public class SortCompare {
         else if (alg.equals("Selection"))       Selection.sort(a);
 //        else if (alg.equals("Bubble"))          Bubble.sort(a);
         else if (alg.equals("Shell"))           Shell.sort(a);
-//        else if (alg.equals("Merge"))           Merge.sort(a);
-//        else if (alg.equals("MergeX"))          MergeX.sort(a);
+        else if (alg.equals("Merge"))           Merge.sort(a);
+        else if (alg.equals("MergeX"))          MergeX.sort(a);
 //        else if (alg.equals("MergeBU"))         MergeBU.sort(a);
 //        else if (alg.equals("Quick"))           Quick.sort(a);
 //        else if (alg.equals("Quick3way"))       Quick3way.sort(a);
