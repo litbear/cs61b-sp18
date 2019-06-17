@@ -1,5 +1,7 @@
 package io.litbear.datastructure.sort;
 
+import edu.princeton.cs.algs4.StdRandom;
+
 import java.util.Comparator;
 
 public class QuickMedian3 {
@@ -8,6 +10,7 @@ public class QuickMedian3 {
     private QuickMedian3() {}
 
     public static void sort(Comparable[] a) {
+        StdRandom.shuffle(a);
         sort(a, 0, a.length - 1);
         assert Sort.isSorted(a);
     }
