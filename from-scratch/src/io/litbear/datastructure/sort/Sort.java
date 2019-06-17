@@ -62,7 +62,8 @@ public class Sort {
 //        BinaryInsertion.sort(a);
 //        Merge.sort(a);
 //        MergeX.sort(a);
-        MergeBU.sort(a);
+//        MergeBU.sort(a);
+        Quick.sort(a);
         show(a);
 
 //         desc
@@ -74,7 +75,7 @@ public class Sort {
 //        BinaryInsertion.sort(a, desc);
 //        Merge.sort(a, desc);
 //        MergeX.sort(a, desc);
-        MergeBU.sort(a, desc);
-        show(a);
+//        MergeBU.sort(a, desc);
+//        show(a);
     }
 }
