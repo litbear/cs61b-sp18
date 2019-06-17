@@ -2,6 +2,8 @@ package io.litbear.datastructure.sort;
 
 import edu.princeton.cs.algs4.StdRandom;
 
+import java.util.Comparator;
+
 public class Quick {
     public static void sort(Comparable[] a) {
         StdRandom.shuffle(a);
@@ -50,5 +52,33 @@ public class Quick {
             else return a[i];
         }
         return a[lo];
+    }
+
+    // Comparator as arguments
+
+    public static void sort(Object[] a, Comparator comparator) {
+        sort(a, comparator, 0, a.length - 1);
+    }
+
+    private static void sort(Object[] a, Comparator comparator, int lo, int hi) {
+        if (lo >= hi) return;
+
+        int j = partition(a, comparator, lo, hi);
+        sort(a, comparator, lo, j - 1);
+        sort(a, comparator, j + 1, hi);
+        assert Sort.isSorted(a, comparator, lo, hi);
+    }
+
+    private static int partition(Object[] a, Comparator comparator, int lo, int hi) {
+        int i = lo, j = hi + 1;
+
+        while (true) {
+            while (Sort.less(comparator, a[++i], a[lo])) if (i >= hi) break;
+            while (Sort.less(comparator, a[lo], a[--j])) if (j <= lo) break; // 冗余
+            if(i >= j) break;
+            Sort.exch(a, lo, hi);
+        }
+        Sort.exch(a, lo, j);
+        return j;
     }
 }

@@ -63,7 +63,8 @@ public class Sort {
 //        Merge.sort(a);
 //        MergeX.sort(a);
 //        MergeBU.sort(a);
-        Quick.sort(a);
+//        Quick.sort(a);
+        QuickMedian3.sort(a);
         show(a);
 
 //         desc
@@ -76,6 +77,8 @@ public class Sort {
 //        Merge.sort(a, desc);
 //        MergeX.sort(a, desc);
 //        MergeBU.sort(a, desc);
-//        show(a);
+//        Quick.sort(a, desc);
+        QuickMedian3.sort(a, desc);
+        show(a);
     }
 }
