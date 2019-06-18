@@ -80,6 +80,7 @@ public class Sort {
 //        MergeBU.sort(a, desc);
 //        Quick.sort(a, desc);
 //        QuickMedian3.sort(a, desc);
-//        show(a);
+        Quick3way.sort(a, desc);
+        show(a);
     }
 }
