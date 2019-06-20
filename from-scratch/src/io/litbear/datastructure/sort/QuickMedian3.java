@@ -22,7 +22,7 @@ public class QuickMedian3 {
             return;
         }
 
-        int m = median3(a, lo, lo + (hi - lo + 1) / 2, hi);
+        int m = median3(a, lo, (lo + hi) / 2, hi);
         Sort.exch(a, lo, m);
 
         int j = partition(a, lo, hi);
@@ -82,7 +82,9 @@ public class QuickMedian3 {
             return;
         }
 
-        int mid = median3(a, comparator, lo, lo + (hi - lo) / 2, hi);
+        // 这样比 lo + (hi - lo) / 2 更简洁，但是会溢出
+        // https://stackoverflow.com/questions/6486947/bug-in-quicksort-example-kr-c-book
+        int mid = median3(a, comparator, lo, (lo + hi) / 2, hi);
         Sort.exch(a, lo, mid);
         int j = partition(a, comparator, lo, hi);
         sort(a, comparator, lo, j - 1);

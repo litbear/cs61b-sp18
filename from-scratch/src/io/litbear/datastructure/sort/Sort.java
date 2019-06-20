@@ -65,7 +65,8 @@ public class Sort {
 //        MergeBU.sort(a);
 //        Quick.sort(a);
 //        QuickMedian3.sort(a);
-        Quick3way.sort(a);
+//        Quick3way.sort(a);
+        QuickKR.sort(a);
         show(a);
 
 //         desc
@@ -80,7 +81,14 @@ public class Sort {
 //        MergeBU.sort(a, desc);
 //        Quick.sort(a, desc);
 //        QuickMedian3.sort(a, desc);
-        Quick3way.sort(a, desc);
+//        Quick3way.sort(a, desc);
+        QuickKR.sort(a, desc);
         show(a);
+    }
+
+    public static void show(Comparable[] a, int lo, int hi) {
+        for (int i = lo; i <= hi; i++)
+            StdOut.print(a[i] + " ");
+        StdOut.println();
     }
 }
