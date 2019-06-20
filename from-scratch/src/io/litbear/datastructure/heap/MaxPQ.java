@@ -1,9 +1,6 @@
 package io.litbear.datastructure.heap;
 
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.Spliterator;
+import java.util.*;
 import java.util.function.Consumer;
 
 public class MaxPQ<Key> implements Iterable<Key> {
@@ -21,7 +18,17 @@ public class MaxPQ<Key> implements Iterable<Key> {
         n = 0;
     }
 
-//    public MaxPQ(Key[] a) {}
+    public MaxPQ(int initCapacity, Comparator<Key> comparator) {
+        this.comparator = comparator;
+        pq = (Key[]) new Object[initCapacity + 1];
+        n = 0;
+    }
+
+    public MaxPQ(Comparator<Key> comparator) {
+        this(1, comparator);
+    }
+
+//    public MaxPQ(Key[] keys) {}
 
     public boolean isEmpty() {
         return n == 0;
@@ -37,6 +44,9 @@ public class MaxPQ<Key> implements Iterable<Key> {
     }
 
     public void insert(Key x) {
+        // resize
+        if (n == pq.length - 1) resize(pq.length << 2);
+
         pq[++n] = x;
         swim(n);
         assert isMaxHeap();
@@ -44,12 +54,19 @@ public class MaxPQ<Key> implements Iterable<Key> {
 
     public Key delMax() {
         if (isEmpty()) throw new NoSuchElementException("Priority queue underflow");
-        return null;
-        // TODO not implement yet
+        Key max = pq[1];
+        exch(1, n--);
+        sink(1);
+        // fire gc
+        pq[n+1] = null;
+        // resize
+        if (n > 0 && n < (pq.length - 1) / 4) resize(pq.length / 2);
+
+        assert isMaxHeap();
+        return max;
     }
 
     // tool function
-
     private boolean less(int i, int j) {
         if (comparator == null) {
             return ((Comparable<Key>) pq[i]).compareTo(pq[j]) < 0;
@@ -83,15 +100,26 @@ public class MaxPQ<Key> implements Iterable<Key> {
         while (2 * k <= n) {
             // 左子节点
             int j = 2 * k;
-            // 如果待交换节点：有右子节点且右子节点对应值比左子节点大，则使用右子节点；
-            // 否则继续使用左子节点
+            // 根据while条件，等号保证了k至少要有左子节点
+            // 此时再约束j<n即要求k也要有右子节点
+            // 如果待交换节点k：有右子节点且右子节点对应值比左子节点大，则使用右子节点；
+            // 否则继续使用左子节点，即使用两个子节点中的最大值
             if(j < n && less(j, j + 1)) j++;
-            // 如果待交换节点优先级不大于当前节点，则下沉完成
+            // 如果待交换节点k不小于子节点中的最大值，则下沉完成
             if(!less(k, j)) break;
             // 否则更新当前节点继续下沉
             exch(k, j);
             k = j;
         }
+    }
+
+    private void resize(int capacity) {
+        assert capacity > n;
+        Key[] temp = (Key[]) new Object[capacity];
+//        for (int i = 1; i <= n; i++)
+//            temp[i] = pq[n];
+        System.arraycopy(pq, 1, temp, 1, n);
+        pq = temp;
     }
 
     // assertion
