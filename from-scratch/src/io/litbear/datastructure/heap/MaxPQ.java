@@ -9,6 +9,8 @@ public class MaxPQ<Key> implements Iterable<Key> {
     private int n;
     private Comparator<Key> comparator;
 
+    // constructor
+
     public MaxPQ() {
         this(1);
     }
@@ -30,6 +32,8 @@ public class MaxPQ<Key> implements Iterable<Key> {
 
 //    public MaxPQ(Key[] keys) {}
 
+    // API
+
     public boolean isEmpty() {
         return n == 0;
     }
@@ -45,28 +49,31 @@ public class MaxPQ<Key> implements Iterable<Key> {
 
     public void insert(Key x) {
         // resize
-        if (n == pq.length - 1) resize(pq.length << 2);
+        if (n == pq.length - 1) resize(pq.length << 1);
 
         pq[++n] = x;
         swim(n);
         assert isMaxHeap();
     }
 
+    @SuppressWarnings("Duplicates")
     public Key delMax() {
         if (isEmpty()) throw new NoSuchElementException("Priority queue underflow");
         Key max = pq[1];
         exch(1, n--);
         sink(1);
+
         // fire gc
         pq[n+1] = null;
         // resize
-        if (n > 0 && n < (pq.length - 1) / 4) resize(pq.length / 2);
-
+        if (n > 0 && n < (pq.length - 1) / 4) resize(pq.length >> 1);
+        // assertion
         assert isMaxHeap();
+
         return max;
     }
 
-    // tool function
+    // util
     private boolean less(int i, int j) {
         if (comparator == null) {
             return ((Comparable<Key>) pq[i]).compareTo(pq[j]) < 0;
@@ -141,16 +148,29 @@ public class MaxPQ<Key> implements Iterable<Key> {
 
     @Override
     public Iterator<Key> iterator() {
-        return null;
+        return new HeapIterator();
     }
 
-    @Override
-    public void forEach(Consumer<? super Key> action) {
+    private class HeapIterator implements Iterator<Key> {
 
-    }
+        // create a new pq
+        private MaxPQ<Key> copy;
 
-    @Override
-    public Spliterator<Key> spliterator() {
-        return null;
+        // add all items to copy of heap
+        // takes linear time since already in heap order so no keys move
+        public HeapIterator() {
+            if (comparator == null) copy = new MaxPQ<Key>(size());
+            else                    copy = new MaxPQ<Key>(size(), comparator);
+            for (int i = 1; i <= n; i++)
+                copy.insert(pq[i]);
+        }
+
+        public boolean hasNext()  { return !copy.isEmpty();                     }
+        public void remove()      { throw new UnsupportedOperationException();  }
+
+        public Key next() {
+            if (!hasNext()) throw new NoSuchElementException();
+            return copy.delMax();
+        }
     }
 }
