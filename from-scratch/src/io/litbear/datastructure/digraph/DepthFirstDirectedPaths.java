@@ -1,32 +1,31 @@
 package io.litbear.datastructure.digraph;
 
+
 import edu.princeton.cs.algs4.In;
-import edu.princeton.cs.algs4.Queue;
 import edu.princeton.cs.algs4.Stack;
 import edu.princeton.cs.algs4.StdOut;
 
-@SuppressWarnings("Duplicates")
+/**
+ * 使用深度优先搜索，从给定起点开始预处理有向图
+ * 判断给定定点是否能从起点到达
+ */
 public class DepthFirstDirectedPaths {
+    private static final int START_SENTINEL = -1;
     private boolean[] marked;
     private int[] edgeTo;
-    private final int s;       // source vertex
 
     public DepthFirstDirectedPaths(Digraph G, int s) {
         marked = new boolean[G.V()];
-        edgeTo = new int[G.V()];
-        this.s = s;
         validateVertex(s);
-        dfs(G, s);
+        edgeTo = new int[G.V()];
+        dfs(G, START_SENTINEL, s);
     }
 
-    private void dfs(Digraph G, int v) {
+    private void dfs(Digraph G, int u, int v) {
         marked[v] = true;
-
-        for (int w : G.adj(v)) {
-            if (!marked[w]) {
-                edgeTo[w] = v;
-                dfs(G, w);
-            }
+        edgeTo[v] = u;
+        for(int w : G.adj(v)) {
+            if (!marked[w]) dfs(G, v, w);
         }
     }
 
@@ -37,16 +36,17 @@ public class DepthFirstDirectedPaths {
 
     public Iterable<Integer> pathTo(int v) {
         validateVertex(v);
-        if (!hasPathTo(v)) return null;
+        if (!marked[v]) return null;
         Stack<Integer> stack = new Stack<>();
-        for (int x = v; x != s; x = edgeTo[x]) {
-            stack.push(x);
+        while (v != START_SENTINEL) {
+            stack.push(v);
+            v = edgeTo[v];
         }
-        stack.push(s);
         return stack;
     }
 
 
+    // util
     // throw an IllegalArgumentException unless {@code 0 <= v < V}
     private void validateVertex(int v) {
         int V = marked.length;
@@ -54,7 +54,11 @@ public class DepthFirstDirectedPaths {
             throw new IllegalArgumentException("vertex " + v + " is not between 0 and " + (V-1));
     }
 
-
+    /**
+     * Unit tests the {@code DepthFirstDirectedPaths} data type.
+     *
+     * @param args the command-line arguments
+     */
     public static void main(String[] args) {
         In in = new In(args[0]);
         Digraph G = new Digraph(in);

@@ -1,48 +1,45 @@
 package io.litbear.datastructure.digraph;
 
+
 import edu.princeton.cs.algs4.Bag;
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdOut;
 
-public class DirectedDFS {
-    private boolean[] marked;  // marked[v] = true iff v is reachable from source(s)
-    private int count;         // number of vertices reachable from source(s)
 
+/**
+ * 使用深度优先搜索，从给定起点处理有向图
+ * 可检测给定顶点是否与起点连通，
+ * 连通顶点数量
+ */
+public class DirectedDFS {
+    private boolean[] marked; // 记录相应节点是否被访问
+    private int count; // 记录可访问节点数量
+
+    // constructor
     public DirectedDFS(Digraph G, int s) {
         marked = new boolean[G.V()];
         validateVertex(s);
         dfs(G, s);
     }
 
-    public DirectedDFS(Digraph G, Iterable<Integer> sources) {
+    public DirectedDFS(Digraph G, Iterable<Integer> source) {
         marked = new boolean[G.V()];
-        validateVertices(sources);
-        for (int s : sources) {
+        validateVertices(source);
+        for (int s : source) {
             if (!marked[s]) dfs(G, s);
         }
     }
 
-    private void dfs(Digraph G, int v) {
-        marked[v] = true;
-        count++;
-        for (int w: G.adj(v)) {
-            if (!marked[w]) {
-                dfs(G, w);
-            }
-        }
+    // api
+    public int count(){
+        return count;
     }
-
     public boolean marked(int v) {
         validateVertex(v);
         return marked[v];
     }
 
-    public int count() {
-        return count;
-    }
-
-
-    // throw an IllegalArgumentException unless {@code 0 <= v < V}
+    // util
     private void validateVertex(int v) {
         int V = marked.length;
         if (v < 0 || v >= V)
@@ -61,6 +58,15 @@ public class DirectedDFS {
             }
         }
     }
+
+    private void dfs(Digraph G, int v) {
+        marked[v] = true;
+        count++;
+        for (int w : G.adj(v)) {
+            if (!marked[w]) dfs(G, w);
+        }
+    }
+
 
     /**
      * Unit tests the {@code DirectedDFS} data type.

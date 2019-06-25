@@ -47,7 +47,7 @@ public class SymbolGraph {
     }
 
     /**
-     * 检查当前图是否包含制定符号
+     * 检查当前图是否包含指定符号
      *
      * @param s 指定符号
      * @return 是否包含
@@ -88,8 +88,7 @@ public class SymbolGraph {
      */
     @Deprecated
     public String name(int v) {
-        validateVertex(v);
-        return keys[v];
+        return nameOf(v);
     }
 
 
