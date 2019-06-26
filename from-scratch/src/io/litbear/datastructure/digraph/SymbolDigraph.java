@@ -23,7 +23,7 @@ public class SymbolDigraph {
         }
 
         keys = new String[st.size()];
-        for(String name : st)
+        for(String name : st.keys())
             keys[st.get(name)] = name;
 
         // 第二部遍历 生成有向图
