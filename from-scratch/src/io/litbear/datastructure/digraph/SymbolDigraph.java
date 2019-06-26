@@ -6,6 +6,7 @@ import edu.princeton.cs.algs4.StdIn;
 import edu.princeton.cs.algs4.StdOut;
 
 public class SymbolDigraph {
+    private static final String NEWLINE = System.getProperty("line.separator");
     private ST<String, Integer> st ;
     private String[] keys;
     private Digraph digraph;
@@ -58,6 +59,18 @@ public class SymbolDigraph {
         return digraph;
     }
 
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (String s : st.keys()) {
+            sb.append(s + NEWLINE);
+            for (int w : digraph.adj(st.get(s))) {
+                sb.append("    " + keys[w] + NEWLINE);
+            }
+        }
+        return sb.toString();
+    }
+
     // utils
     // throw an IllegalArgumentException unless {@code 0 <= v < V}
     private void validateVertex(int v) {
@@ -76,12 +89,7 @@ public class SymbolDigraph {
         String filename  = args[0];
         String delimiter = args[1];
         SymbolDigraph sg = new SymbolDigraph(filename, delimiter);
-        Digraph graph = sg.digraph();
-        while (!StdIn.isEmpty()) {
-            String t = StdIn.readLine();
-            for (int v : graph.adj(sg.indexOf(t))) {
-                StdOut.println("   " + sg.nameOf(v));
-            }
-        }
+//        Digraph graph = sg.digraph();
+        StdOut.println(sg);
     }
 }

@@ -147,5 +147,7 @@ public class Digraph {
         In in = new In(args[0]);
         Digraph G = new Digraph(in);
         StdOut.println(G);
+        StdOut.println("------------");
+        StdOut.println(G.reverse());
     }
 }
