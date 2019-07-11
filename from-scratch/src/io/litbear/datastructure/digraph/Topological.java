@@ -21,7 +21,20 @@ public class Topological {
         }
     }
 
-    // TODO 加权有向图的拓扑排序
+    // 加权有向图的拓扑排序
+    public Topological(EdgeWeightedDigraph G) {
+        EdgeWeightedDirectedCycle director = new EdgeWeightedDirectedCycle(G);
+        if (!director.hasCycle()) {
+            DepthFirstOrder depthFirstOrder = new DepthFirstOrder(G);
+            order = depthFirstOrder.reversePost();
+            // 虽然用不上，但为了保证一致性也加上去了
+            rank = new int[G.V()];
+            int i = 0;
+            for (int v : order) {
+                rank[v] = i++;
+            }
+        }
+    }
 
     // API
     public boolean hasOrder() {

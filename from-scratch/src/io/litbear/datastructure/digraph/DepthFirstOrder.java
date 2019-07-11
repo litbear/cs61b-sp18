@@ -44,10 +44,35 @@ public class DepthFirstOrder {
     }
 
 
-    // TODO 加权有向图深度优先遍历.
+    // 加权有向图深度优先遍历.
+    public DepthFirstOrder(EdgeWeightedDigraph G) {
+        marked = new boolean[G.V()];
+        pre = new int[G.V()];
+        post = new int[G.V()];
+        preorder = new Queue<>();
+        postorder = new Queue<>();
+
+        for (int v = 0; v < G.V(); v++)
+            if (!marked[v]) dfs(G, v);
+        assert check();
+    }
+
+    private void dfs(EdgeWeightedDigraph G, int v) {
+        marked[v] = true;
+
+        pre[v] = preCounter++;
+        preorder.enqueue(v);
+
+        for (DirectedEdge e : G.adj(v)) {
+            int w = e.to();
+            if (!marked[w]) dfs(G, w);
+        }
+
+        post[v] = postCounter++;
+        postorder.enqueue(v);
+    }
 
     // API
-
     public int pre(int v) {
         validateVertex(v);
         return pre[v];
