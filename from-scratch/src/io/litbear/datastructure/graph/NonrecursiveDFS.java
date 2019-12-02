@@ -14,25 +14,31 @@ public class NonrecursiveDFS {
     public NonrecursiveDFS(Graph G, int s) {
         marked = new boolean[G.V()];
 
-        Iterator<Integer>[] adj = new Iterator[G.V()];
+        // 构建迭代器数组
+        Iterator<Integer>[] iterators = new Iterator[G.V()];
         for (int v = 0; v < G.V(); v++) {
-            adj[v] = G.adj(v).iterator();
+            iterators[v] = G.adj(v).iterator();
         }
 
+        // 储存从s到当前顶点的路径
         Stack<Integer> stack = new Stack<>();
         marked[s] = true;
         stack.push(s);
         count++;
         while (!stack.isEmpty()) {
+            // 取栈顶元素
             int v = stack.peek();
-            if (adj[v].hasNext()) {
-                int w = adj[v].next();
+            if (iterators[v].hasNext()) {
+                // 从迭代器数组中取出指定迭代器继续操作
+                int w = iterators[v].next();
                 if (!marked[w]) {
                     count++;
                     marked[w] = true;
+                    // 置于栈顶，走向更深度的遍历
                     stack.push(w);
                 }
             } else {
+                // 当前迭代器耗尽后弹出对应元素
                 stack.pop();
             }
         }
@@ -44,7 +50,7 @@ public class NonrecursiveDFS {
 
 
     public int count() {
-        return 0;
+        return count;
     }
 
     public static void main(String[] args) {

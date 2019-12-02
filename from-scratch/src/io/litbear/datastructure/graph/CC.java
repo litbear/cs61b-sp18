@@ -12,9 +12,9 @@ import edu.princeton.cs.algs4.StdOut;
  */
 public class CC {
     private boolean[] marked;   // marked[v] = has vertex v been marked?
-    private int[] id;           // id[v] = id of connected component containing v
+    private int[] id;           // id[v] = id of connected component containing v 根据顶点获取该定点连通分量ID
     private int[] size;         // size[id] = number of vertices in given component
-    private int count;          // number of connected components
+    private int count;          // number of connected components 当前连通分量序号
 
     public CC (Graph G) {
         marked = new boolean[G.V()];

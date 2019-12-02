@@ -10,8 +10,8 @@ public class Cycle {
     private Stack<Integer> cycle;
 
     public Cycle(Graph G) {
-//        if(hasSelfLoop(G)) return;
-//        if(hasParallelEdges(G)) return;
+        if(hasSelfLoop(G)) return;
+        if(hasParallelEdges(G)) return;
         marked = new boolean[G.V()];
         edgeTo = new int[G.V()];
 
@@ -73,7 +73,7 @@ public class Cycle {
      * such that w is already visited and w is not parent of v,
      * then there is a cycle in graph.
      * <p>
-     * 对于所有以访问的节点'v'，如果存在某个相邻节点'w'，已经访问，
+     * 对于所有已访问的节点'v'，如果存在某个相邻节点'w'，已经访问，
      * 且w不是v节点的父节点，则当前图中存在环
      * <p>
      * 这里的"已经访问，且w不是v节点的父节点" 既可以使用递归参数，
