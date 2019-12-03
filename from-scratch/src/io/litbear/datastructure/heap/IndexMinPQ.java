@@ -76,6 +76,7 @@ public class IndexMinPQ<Key extends Comparable<Key>> implements IndexMinPQInterf
         return n;
     }
 
+    @SuppressWarnings("Duplicates")
     @Override
     public void insert(int i, Key key) {
         if (i < 0 || i>= maxN) throw new IllegalArgumentException();
@@ -98,6 +99,12 @@ public class IndexMinPQ<Key extends Comparable<Key>> implements IndexMinPQInterf
         return keys[pq[1]];
     }
 
+    /**
+     * 注意，这里返回的是key，而不是int类型的index，与示例代码不一致
+     *
+     * @return Key
+     */
+    @SuppressWarnings("Duplicates")
     @Override
     public Key delMin() {
         if (n == 0) throw new NoSuchElementException("Priority queue underflow");

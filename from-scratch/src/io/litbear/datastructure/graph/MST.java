@@ -93,9 +93,12 @@ public interface MST {
     static void main(String[] args) {
         In in = new In(args[0]);
         EdgeWeightedGraph G = new EdgeWeightedGraph(in);
+        CC cc = new CC(G);
+        System.out.println("The counts of CC is " + cc.count());
+
 //        MST mst = new KruskalMST(G);
-//        MST mst = new LazyPrimMST(G);
-        MST mst = new PrimMST(G);
+        MST mst = new LazyPrimMST(G);
+//        MST mst = new PrimMST(G);
         for (Edge e : mst.edges()) {
             StdOut.println(e);
         }

@@ -13,7 +13,7 @@ import edu.princeton.cs.algs4.StdOut;
 public class CC {
     private boolean[] marked;   // marked[v] = has vertex v been marked?
     private int[] id;           // id[v] = id of connected component containing v 根据顶点获取该定点连通分量ID
-    private int[] size;         // size[id] = number of vertices in given component
+    private int[] size;         // size[id] = number of vertices in given component 根据连通分量ID获取其所含顶点个数
     private int count;          // number of connected components 当前连通分量序号
 
     public CC (Graph G) {
@@ -39,6 +39,32 @@ public class CC {
         id[v] = count;
         size[count]++;
         for (int w : G.adj(v)) {
+            if (!marked[w]) {
+                dfs(G, w);
+            }
+        }
+    }
+
+//    --------------------------
+
+    public CC(EdgeWeightedGraph G) {
+        marked = new boolean[G.V()];
+        id = new int[G.V()];
+        size = new int[G.V()];
+        for (int v = 0; v < G.V(); v++) {
+            if (!marked[v]) {
+                dfs(G, v);
+                count++;
+            }
+        }
+    }
+
+    public void dfs(EdgeWeightedGraph G, int v) {
+        marked[v] = true;
+        id[v] = count;
+        size[count]++;
+        for (Edge e: G.adj(v)) {
+            int w = e.other(v);
             if (!marked[w]) {
                 dfs(G, w);
             }

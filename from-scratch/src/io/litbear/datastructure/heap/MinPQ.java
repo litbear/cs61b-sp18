@@ -5,8 +5,8 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 public class MinPQ<Key> implements Iterable<Key> {
-    private Key[] pq;
-    private int n;
+    private Key[] pq;                       // 保存优先队列的数组
+    private int n;                          // 当前优先队列容量
     private Comparator<Key> comparator;
 
 
@@ -51,6 +51,7 @@ public class MinPQ<Key> implements Iterable<Key> {
         if (isEmpty()) throw new NoSuchElementException("Priority queue underflow");
 
         Key min = pq[1];
+        // 交换之后尽快把总数减掉，以防上浮或下沉操作时，删掉的元素还在参与计算
         exch(1, n--);
         sink(1);
 

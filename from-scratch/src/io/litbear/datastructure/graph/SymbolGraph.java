@@ -31,13 +31,13 @@ public class SymbolGraph {
         }
 
         keys = new String[st.size()];
-        for (String name : st) {
+        for (String name : st.keys()) {
             keys[st.get(name)] = name;
         }
 
         graph = new Graph(st.size());
         in = new In(filename);
-        while (!in.isEmpty()) {
+        while (in.hasNextLine()) {
             String[] a = in.readLine().split(delimiter);
             int v = st.get(a[0]);
             for (int i = 1; i < a.length; i++) {
@@ -133,17 +133,12 @@ public class SymbolGraph {
         String delimiter = args[1];
         SymbolGraph sg = new SymbolGraph(filename, delimiter);
         Graph graph = sg.graph();
-        while (StdIn.hasNextLine()) {
-            String source = StdIn.readLine();
-            if (sg.contains(source)) {
-                int s = sg.indexOf(source);
-                for (int v : graph.adj(s)) {
-                    StdOut.println("   " + sg.nameOf(v));
-                }
-            }
-            else {
-                StdOut.println("input not contain '" + source + "'");
+        for(String v: sg.st) {
+            StdOut.println(v);
+            for (int w : graph.adj(sg.indexOf(v))) {
+                StdOut.println("   " + sg.nameOf(w));
             }
         }
+
     }
 }

@@ -11,14 +11,20 @@ public class DegreesOfSeparation {
         String filename = args[0];
         String delimiter = args[1];
         String source = args[2];
+        String targets = args[3];
 
         SymbolGraph sg = new SymbolGraph(filename, delimiter);
         Graph G = sg.graph();
+        if (!sg.contains(source)) {
+            StdOut.println(source + " not in database.");
+            return;
+        }
+
         int sourceIndex = sg.indexOf(source);
         BreadthFirstPaths bfp = new BreadthFirstPaths(G, sourceIndex);
 
-        while (!StdIn.isEmpty()) {
-            String target = StdIn.readLine();
+        for (String target: targets.split(delimiter)) {
+            System.out.println(target);
             if (sg.contains(target)) {
                 int targetIndex = sg.indexOf(target);
                 if (bfp.hasPathTo(targetIndex)) {

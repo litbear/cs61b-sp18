@@ -5,8 +5,8 @@ import edu.princeton.cs.algs4.*;
 public class LazyPrimMST implements MST{
 
 
-    private double weight;                     // weight of MST
-    private Queue<Edge> mst = new Queue<>();  // edges in MST
+    private double weight;                      // weight of MST
+    private Queue<Edge> mst = new Queue<>();    // edges in MST
     private boolean[] marked;
     private MinPQ<Edge> pq = new MinPQ<>();
 
@@ -18,7 +18,8 @@ public class LazyPrimMST implements MST{
      */
     public LazyPrimMST(EdgeWeightedGraph G) {
         marked = new boolean[G.V()];
-        // 遍历所有连通分量，因此是最小生成森林
+        // 示例代码：遍历所有连通分量，因此是最小生成森林
+        // 缺心眼儿吗？如果有多个连通分量肯定都覆盖了
         for (int v = 0; v < G.V(); v++) {
             if (!marked[v]) {
                 prim(G, v);
@@ -31,6 +32,7 @@ public class LazyPrimMST implements MST{
     private void prim(EdgeWeightedGraph G, int s) {
         visit(G, s);
         while (!pq.isEmpty()) {
+            // 从当前最小生成树的所有临边中选择最小的
             Edge e = pq.delMin();
             int v = e.either();
             int w = e.other(v);
@@ -44,6 +46,7 @@ public class LazyPrimMST implements MST{
         }
     }
 
+    // 将新加入节点的所有(违背访问的)相临边加入最小生成树
     private void visit(EdgeWeightedGraph G, int v) {
         assert !marked[v];
         marked[v] = true;
