@@ -13,7 +13,7 @@ public class Digraph {
     private final int V; // 定点数
     private int E; // 边数
     private Bag<Integer>[] adj; // 邻接矩阵
-    private int[] indegree; // indegree[v] 顶点v的出度
+    private int[] indegree; // indegree[v] 顶点v的入度
 
 
     // constructor

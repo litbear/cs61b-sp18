@@ -85,6 +85,7 @@ public class DirectedCycle {
      *
      * @param args the command-line arguments
      */
+    @SuppressWarnings("Duplicates")
     public static void main(String[] args) {
         In in = new In(args[0]);
         Digraph G = new Digraph(in);

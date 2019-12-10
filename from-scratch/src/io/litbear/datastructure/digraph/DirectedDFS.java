@@ -47,6 +47,7 @@ public class DirectedDFS {
     }
 
     // throw an IllegalArgumentException unless {@code 0 <= v < V}
+    @SuppressWarnings("Duplicates")
     private void validateVertices(Iterable<Integer> vertices) {
         if (vertices == null) {
             throw new IllegalArgumentException("argument is null");
