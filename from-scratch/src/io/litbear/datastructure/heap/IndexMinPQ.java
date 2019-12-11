@@ -26,10 +26,20 @@ public class IndexMinPQ<Key extends Comparable<Key>> implements IndexMinPQInterf
 
     // utils
 
+    /**
+     * @param i 二叉堆索引i
+     * @param j 二叉堆索引j
+     * @return 对应key的比较结果
+     */
     private boolean less(int i, int j) {
         return keys[pq[i]].compareTo(keys[pq[j]]) < 0;
     }
 
+    /**
+     *
+     * @param i 二叉堆索引i
+     * @param j 二叉堆索引j
+     */
     private void exch(int i, int j) {
         int tempIndex = pq[i];
         pq[i] = pq[j];
@@ -40,21 +50,27 @@ public class IndexMinPQ<Key extends Comparable<Key>> implements IndexMinPQInterf
         qp[pq[j]] = j;
     }
 
-    private void swim(int i) {
-        while (i > 1 && less(i, i / 2)) {
-            exch(i, i / 2);
-            i = i / 2;
+    /**
+     * @param k 二叉堆索引k
+     */
+    private void swim(int k) {
+        while (k > 1 && less(k, k / 2)) {
+            exch(k, k / 2);
+            k = k / 2;
         }
     }
 
+    /**
+     * @param k 二叉堆索引k
+     */
     @SuppressWarnings("Duplicates")
-    private void sink(int i) {
-        while (2 * i <= n) {
-            int j = 2 * i;
+    private void sink(int k) {
+        while (2 * k <= n) {
+            int j = 2 * k;
             if (j < n && less(j + 1, j)) j++;
-            if (less(i, j)) break;
-            exch(i, j);
-            i = j;
+            if (less(k, j)) break;
+            exch(k, j);
+            k = j;
         }
     }
 
@@ -65,6 +81,10 @@ public class IndexMinPQ<Key extends Comparable<Key>> implements IndexMinPQInterf
         return n == 0;
     }
 
+    /**
+     * @param i 关联索引
+     * @return
+     */
     @Override
     public boolean contains(int i) {
         if (i < 0 || i>= maxN) throw new IllegalArgumentException();
@@ -76,6 +96,10 @@ public class IndexMinPQ<Key extends Comparable<Key>> implements IndexMinPQInterf
         return n;
     }
 
+    /**
+     * @param i 关联索引
+     * @param key 对象
+     */
     @SuppressWarnings("Duplicates")
     @Override
     public void insert(int i, Key key) {
@@ -89,11 +113,17 @@ public class IndexMinPQ<Key extends Comparable<Key>> implements IndexMinPQInterf
         swim(n);
     }
 
+    /**
+     * @return 关联索引
+     */
     @Override
     public int minIndex() {
         return pq[1];
     }
 
+    /**
+     * @return key
+     */
     @Override
     public Key minKey() {
         return keys[pq[1]];
@@ -120,6 +150,10 @@ public class IndexMinPQ<Key extends Comparable<Key>> implements IndexMinPQInterf
         return minKey;
     }
 
+    /**
+     * @param i 关联索引
+     * @return 对应的key
+     */
     @Override
     public Key keyOf(int i) {
         if (i < 0 || i>= maxN) throw new IllegalArgumentException();
@@ -128,6 +162,10 @@ public class IndexMinPQ<Key extends Comparable<Key>> implements IndexMinPQInterf
         return keys[i];
     }
 
+    /**
+     * @param i 关联索引
+     * @param key 新的对象key
+     */
     @Override
     public void changeKey(int i, Key key) {
         if (i < 0 || i>= maxN) throw new IllegalArgumentException();
@@ -139,6 +177,9 @@ public class IndexMinPQ<Key extends Comparable<Key>> implements IndexMinPQInterf
         swim(heapIndex);
     }
 
+    /**
+     * @param i 关联索引
+     */
     @Override
     public void delete(int i) {
         if (i < 0 || i >= maxN) throw new IllegalArgumentException();
