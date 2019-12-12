@@ -5,7 +5,7 @@ import edu.princeton.cs.algs4.Stack;
 import edu.princeton.cs.algs4.StdOut;
 import io.litbear.datastructure.heap.IndexMinPQ;
 
-public class DijkstraSP {
+public class DijkstraSP implements SP {
     private DirectedEdge[] edgeTo;
     private double[] distTo;
     private IndexMinPQ<Double> pq;
@@ -43,16 +43,19 @@ public class DijkstraSP {
     }
 
     // APIs
+    @Override
     public double distTo(int v) {
         validateVertex(v);
         return distTo[v];
     }
 
+    @Override
     public boolean hasPathTo(int v) {
         validateVertex(v);
         return distTo[v] != Double.POSITIVE_INFINITY;
     }
 
+    @Override
     public Iterable<DirectedEdge> pathTo(int v) {
         validateVertex(v);
         if (distTo[v] == Double.POSITIVE_INFINITY) return null;
