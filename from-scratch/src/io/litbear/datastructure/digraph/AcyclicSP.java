@@ -5,7 +5,7 @@ import edu.princeton.cs.algs4.Stack;
 import edu.princeton.cs.algs4.StdOut;
 
 
-public class AcyclicSP {
+public class AcyclicSP implements SP{
     private double[] distTo;
     private DirectedEdge[] edgeTo;
 
@@ -15,8 +15,9 @@ public class AcyclicSP {
 
         validateVertex(s);
 
-        for(int v = 0; v < G.V(); v++)
-            distTo[v] = Double.POSITIVE_INFINITY;
+        for (int i = 0; i < G.V(); i++) {
+            distTo[i] = Double.POSITIVE_INFINITY;
+        }
         distTo[s] = 0.0;
 
         Topological topological = new Topological(G);
@@ -24,41 +25,43 @@ public class AcyclicSP {
             throw new IllegalArgumentException("Digraph is not acyclic.");
         }
 
-        for (int v : topological.order()) {
-            for (DirectedEdge e : G.adj(v)) {
+        for (int v : topological.order())
+            for (DirectedEdge e : G.adj(v))
                 relax(e);
-            }
-        }
     }
 
-    // utils
     private void relax(DirectedEdge e) {
-        int v = e.from(); int w = e.to();
+        int v = e.from();
+        int w = e.to();
         if (distTo[w] > distTo[v] + e.weight()) {
             distTo[w] = distTo[v] + e.weight();
             edgeTo[w] = e;
         }
     }
 
-    // APIs
+    // api
+    @Override
+    public double distTo(int v) {
+        validateVertex(v);
+        return distTo[v];
+    }
+
+    @Override
     public boolean hasPathTo(int v) {
         validateVertex(v);
         return distTo[v] != Double.POSITIVE_INFINITY;
     }
 
+    @Override
     public Iterable<DirectedEdge> pathTo(int v) {
         validateVertex(v);
         if (!hasPathTo(v)) return null;
-        Stack<DirectedEdge> path = new Stack<>();
-        for (DirectedEdge e = edgeTo[v]; e != null; e = edgeTo[e.from()]) {
-            path.push(e);
+        Stack<DirectedEdge> stack = new Stack<>();
+        while (edgeTo[v] != null) {
+            stack.push(edgeTo[v]);
+            v = edgeTo[v].from();
         }
-        return path;
-    }
-
-    public double distTo(int v) {
-        validateVertex(v);
-        return distTo[v];
+        return stack;
     }
 
     // validator
@@ -74,6 +77,7 @@ public class AcyclicSP {
      *
      * @param args the command-line arguments
      */
+    @SuppressWarnings("Duplicates")
     public static void main(String[] args) {
         In in = new In(args[0]);
         int s = Integer.parseInt(args[1]);
