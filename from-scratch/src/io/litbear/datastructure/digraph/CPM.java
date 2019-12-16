@@ -36,6 +36,7 @@ public class CPM {
         }
 
         // compute longest path
+        // 注意，以source，及2*n为起点
         AcyclicLP lp = new AcyclicLP(G, source);
 
         // print results
